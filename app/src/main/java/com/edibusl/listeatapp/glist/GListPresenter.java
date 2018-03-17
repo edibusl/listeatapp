@@ -21,14 +21,17 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class GListPresenter implements GListContract.Presenter {
 
     private final AppData mAppData;
-
     private final GListContract.View mGListView;
+    private int mCurGListId;
 
     public GListPresenter(@NonNull AppData appData, @NonNull GListContract.View glistView) {
         mAppData = checkNotNull(appData, "appData cannot be null");
         mGListView = checkNotNull(glistView, "glistView cannot be null!");
 
         mGListView.setPresenter(this);
+
+        //TODO - Take from saved config
+        mCurGListId = 21;
     }
 
     @Override
@@ -38,27 +41,25 @@ public class GListPresenter implements GListContract.Presenter {
 
     @Override
     public void loadData() {
-        List<GItem> gItems = new ArrayList<GItem>();
-        gItems.add(new GItem().setGitemId(1).setQuantity(1).setCreatedTime(new Date()).setComments("some comments"));
-        gItems.add(new GItem().setGitemId(2).setQuantity(2).setCreatedTime(new Date()).setComments("some comments 2"));
+        mGListView.setLoadingIndicator(true);
 
-        //TODO
-        //mGListView.setLoadingIndicator(true);
+        mAppData.GListRepo().getGListFullInfo(mCurGListId, new AppData.LoadDataCallback() {
+            @Override
+            public void onSuccess(Object data) {
+                GList gList = (GList)data;
+                mGListView.showGItems(gList.getGitems());
 
-//        mAppData.getTasks(new TasksDataSource.LoadTasksCallback() {
-//            @Override
-//            public void onTasksLoaded(List<Task> tasks) {
-//                List<Task> tasksToShow = new ArrayList<Task>();
-//
-//                processTasks(tasksToShow);
-//            }
-//
-//            @Override
-//            public void onDataNotAvailable() {
-//                //TODO
-//                //mGListView.showLoadingTasksError();
-//            }
-//        });
+                //TODO - Show list info
+
+                mGListView.setLoadingIndicator(false);
+            }
+
+            @Override
+            public void onError(String error) {
+                //TODO - Show error
+                mGListView.setLoadingIndicator(false);
+            }
+        });
     }
 
     @Override

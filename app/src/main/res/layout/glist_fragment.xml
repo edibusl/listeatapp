@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.edibusl.listeatapp.glist.ScrollChildSwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/refresh_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <RelativeLayout
-        android:id="@+id/tasksContainer"
+        android:id="@+id/glistContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clickable="true"
         android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/tasksLL"
+            android:id="@+id/glistLL"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
             <ListView
-                android:id="@+id/tasks_list"
+                android:id="@+id/gitems_list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </LinearLayout>
     </RelativeLayout>
-</com.edibusl.listeatapp.glist.ScrollChildSwipeRefreshLayout>
+</android.support.v4.widget.SwipeRefreshLayout>
 

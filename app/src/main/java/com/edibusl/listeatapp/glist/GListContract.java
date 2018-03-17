@@ -19,6 +19,8 @@ public interface GListContract {
         void showGItems(List<GItem> gItems);
 
         void showGListInfo(GList gList);
+
+        void setLoadingIndicator(final boolean active);
     }
 
     interface Presenter extends BasePresenter {

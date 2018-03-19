@@ -2,6 +2,7 @@ package com.edibusl.listeatapp.glist;
 
 import android.app.Activity;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.edibusl.listeatapp.model.datatypes.GItem;
 import com.edibusl.listeatapp.model.datatypes.GList;
@@ -19,6 +20,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * UI as required.
  */
 public class GListPresenter implements GListContract.Presenter {
+    public static final String LOG_TAG = "GListPresenter";
 
     private final AppData mAppData;
     private final GListContract.View mGListView;
@@ -56,7 +58,7 @@ public class GListPresenter implements GListContract.Presenter {
 
             @Override
             public void onError(String error) {
-                //TODO - Show error
+                Log.e(LOG_TAG, error);
                 mGListView.setLoadingIndicator(false);
             }
         });

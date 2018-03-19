@@ -163,7 +163,7 @@ public class GListFragment extends Fragment implements GListContract.View {
             final GItem gItem = getItem(i);
 
             TextView titleTV = (TextView) rowView.findViewById(R.id.title);
-            titleTV.setText(gItem.getComments());
+            titleTV.setText(gItem.getProduct().getName());
 
             CheckBox completeCB = (CheckBox) rowView.findViewById(R.id.complete);
 

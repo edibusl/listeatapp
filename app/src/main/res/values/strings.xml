@@ -3,4 +3,7 @@
     <string name="navigation_view_header_title">ListEat</string>
     <string name="list_title">Grocery List</string>
     <string name="statistics_title">Statistics</string>
+
+    <string name="glist_item_quantity_label">יח</string>
+    <string name="glist_item_weight_label">גרם</string>
 </resources>

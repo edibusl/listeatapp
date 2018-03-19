@@ -162,10 +162,20 @@ public class GListFragment extends Fragment implements GListContract.View {
 
             final GItem gItem = getItem(i);
 
-            TextView titleTV = (TextView) rowView.findViewById(R.id.title);
-            titleTV.setText(gItem.getProduct().getName());
 
-            CheckBox completeCB = (CheckBox) rowView.findViewById(R.id.complete);
+            //Set all text of this gitem row
+            ((TextView)rowView.findViewById(R.id.tvTtitle)).setText(gItem.getProduct().getName());
+            if(gItem.getQuantity() != null) {
+                ((TextView) rowView.findViewById(R.id.tvQuantity)).setText(gItem.getQuantity().toString());
+                ((TextView) rowView.findViewById(R.id.tvLabel)).setText(R.string.glist_item_quantity_label);
+            } else if (gItem.getWeight() != null) {
+                ((TextView) rowView.findViewById(R.id.tvQuantity)).setText(gItem.getWeight().toString());
+                ((TextView) rowView.findViewById(R.id.tvLabel)).setText(R.string.glist_item_weight_label);
+            } else {
+                ((LinearLayout) rowView.findViewById(R.id.llQuantity)).setVisibility(View.INVISIBLE);
+            }
+
+            CheckBox completeCB = (CheckBox) rowView.findViewById(R.id.cbComplete);
 
             // Active/completed task UI
             completeCB.setChecked(gItem.getIsChecked());

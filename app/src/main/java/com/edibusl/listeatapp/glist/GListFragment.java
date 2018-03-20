@@ -18,8 +18,11 @@ import android.widget.TextView;
 import com.edibusl.listeatapp.R;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
+import com.edibusl.listeatapp.model.datatypes.Category;
 import com.edibusl.listeatapp.model.datatypes.GItem;
 import com.edibusl.listeatapp.model.datatypes.GList;
 
@@ -120,7 +123,7 @@ public class GListFragment extends Fragment implements GListContract.View {
     }
 
     private static class GItemsAdapter extends BaseAdapter {
-        private List<GItem> mItems;
+        private List<Object> mItems;
         private GItemListener mItemListener;
 
         public GItemsAdapter(List<GItem> gItems, GItemListener itemListener) {
@@ -134,7 +137,22 @@ public class GListFragment extends Fragment implements GListContract.View {
         }
 
         private void setList(List<GItem> gItems) {
-            mItems = checkNotNull(gItems);
+            mItems = new ArrayList<Object>();
+
+            if(gItems == null){
+                return;
+            }
+
+            Set<Integer> categoryIds = new HashSet<>();
+            for (GItem gItem : gItems){
+                int categoryId = gItem.getProduct().getCategory().getCategory_id();
+                if(!categoryIds.contains(categoryId)){
+                    categoryIds.add(categoryId);
+                    mItems.add(gItem.getProduct().getCategory());
+                }
+
+                mItems.add(gItem);
+            }
         }
 
         @Override
@@ -143,7 +161,7 @@ public class GListFragment extends Fragment implements GListContract.View {
         }
 
         @Override
-        public GItem getItem(int i) {
+        public Object getItem(int i) {
             return mItems.get(i);
         }
 
@@ -155,55 +173,69 @@ public class GListFragment extends Fragment implements GListContract.View {
         @Override
         public View getView(int i, View view, ViewGroup viewGroup) {
             View rowView = view;
-            if (rowView == null) {
-                LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
-                rowView = inflater.inflate(R.layout.glist_gitem, viewGroup, false);
+
+            final Object rowObj = getItem(i);
+            GItem gItem = null;
+            Category category = null;
+            if(rowObj instanceof GItem){
+                gItem = (GItem)rowObj;
+            }else{
+                category = (Category)rowObj;
             }
 
-            final GItem gItem = getItem(i);
-
+            LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
+            if(gItem != null) {
+                rowView = inflater.inflate(R.layout.glist_gitem, viewGroup, false);
+            }else{
+                rowView = inflater.inflate(R.layout.glist_gitem_category, viewGroup, false);
+            }
 
             //Set all text of this gitem row
-            ((TextView)rowView.findViewById(R.id.tvTtitle)).setText(gItem.getProduct().getName());
-            if(gItem.getQuantity() != null) {
-                ((TextView) rowView.findViewById(R.id.tvQuantity)).setText(gItem.getQuantity().toString());
-                ((TextView) rowView.findViewById(R.id.tvLabel)).setText(R.string.glist_item_quantity_label);
-            } else if (gItem.getWeight() != null) {
-                ((TextView) rowView.findViewById(R.id.tvQuantity)).setText(gItem.getWeight().toString());
-                ((TextView) rowView.findViewById(R.id.tvLabel)).setText(R.string.glist_item_weight_label);
-            } else {
-                ((LinearLayout) rowView.findViewById(R.id.llQuantity)).setVisibility(View.INVISIBLE);
-            }
+            if(gItem != null) {
+                ((TextView) rowView.findViewById(R.id.tvTtitle)).setText(gItem.getProduct().getName());
+                if (gItem.getQuantity() != null) {
+                    ((TextView) rowView.findViewById(R.id.tvQuantity)).setText(gItem.getQuantity().toString());
+                    ((TextView) rowView.findViewById(R.id.tvLabel)).setText(R.string.glist_item_quantity_label);
+                } else if (gItem.getWeight() != null) {
+                    ((TextView) rowView.findViewById(R.id.tvQuantity)).setText(gItem.getWeight().toString());
+                    ((TextView) rowView.findViewById(R.id.tvLabel)).setText(R.string.glist_item_weight_label);
+                } else {
+                    ((LinearLayout) rowView.findViewById(R.id.llQuantity)).setVisibility(View.INVISIBLE);
+                }
 
-            CheckBox completeCB = (CheckBox) rowView.findViewById(R.id.cbComplete);
+                CheckBox completeCB = (CheckBox) rowView.findViewById(R.id.cbComplete);
 
-            // Active/completed task UI
-            completeCB.setChecked(gItem.getIsChecked());
-            if (gItem.getIsChecked()) {
-                rowView.setBackgroundDrawable(viewGroup.getContext()
-                        .getResources().getDrawable(R.drawable.glist_checked_touch_feedback));
-            } else {
-                rowView.setBackgroundDrawable(viewGroup.getContext()
-                        .getResources().getDrawable(R.drawable.glist_touch_feedback));
-            }
+                // Active/completed task UI
+                completeCB.setChecked(gItem.getIsChecked());
+                if (gItem.getIsChecked()) {
+                    rowView.setBackgroundDrawable(viewGroup.getContext()
+                            .getResources().getDrawable(R.drawable.glist_checked_touch_feedback));
+                } else {
+                    rowView.setBackgroundDrawable(viewGroup.getContext()
+                            .getResources().getDrawable(R.drawable.glist_touch_feedback));
+                }
 
-            completeCB.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (!gItem.getIsChecked()) {
-                        mItemListener.onItemCheck(gItem);
-                    } else {
-                        mItemListener.onItemUncheck(gItem);
+                final GItem gItemFinal = gItem;
+                completeCB.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (!gItemFinal.getIsChecked()) {
+                            mItemListener.onItemCheck(gItemFinal);
+                        } else {
+                            mItemListener.onItemUncheck(gItemFinal);
+                        }
                     }
-                }
-            });
+                });
 
-            rowView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    mItemListener.onGItemClick(gItem);
-                }
-            });
+                rowView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        mItemListener.onGItemClick(gItemFinal);
+                    }
+                });
+            } else {
+                ((TextView) rowView.findViewById(R.id.tvCategoryTitle)).setText(category.getName());
+            }
 
             return rowView;
         }

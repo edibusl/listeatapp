@@ -1,14 +1,20 @@
 package com.edibusl.listeatapp.glist;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
@@ -22,6 +28,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.edibusl.listeatapp.gitem.GItemActivity;
 import com.edibusl.listeatapp.model.datatypes.Category;
 import com.edibusl.listeatapp.model.datatypes.GItem;
 import com.edibusl.listeatapp.model.datatypes.GList;
@@ -32,9 +39,10 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * Display a grid of {@link GItem}s. User can choose to view all, active or completed tasks.
  */
 public class GListFragment extends Fragment implements GListContract.View {
+    private final int MENU_CONTEXT_DELETE_ID = 1;
+
     private GListContract.Presenter mPresenter;
     private GItemsAdapter mListAdapter;
-    private LinearLayout mGItemsView;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -50,7 +58,6 @@ public class GListFragment extends Fragment implements GListContract.View {
         //Setup glist view
         ListView listView = (ListView) root.findViewById(R.id.gitems_list);
         listView.setAdapter(mListAdapter);
-        mGItemsView = (LinearLayout) root.findViewById(R.id.glistLL);
 
         //Setup floating "+" button - (Add a new gitem)
         FloatingActionButton fab = (FloatingActionButton)getActivity().findViewById(R.id.fab_add_gitem);
@@ -58,7 +65,8 @@ public class GListFragment extends Fragment implements GListContract.View {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //mPresenter.addNewTask();
+                Intent intent = new Intent(getContext(), GItemActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -98,12 +106,19 @@ public class GListFragment extends Fragment implements GListContract.View {
     @Override
     public void showGItems(List<GItem> gItems) {
         mListAdapter.replaceData(gItems);
-        mGItemsView.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void showGListInfo(GList gList) {
+        //TODO
+    }
 
+    @Override
+    public void showGItemInNewActivity(GItem gItem) {
+        //Start the GItem activity and pass this object to there
+        Intent intent = new Intent(getContext(), GItemActivity.class);
+        intent.putExtra("GItem", gItem);
+        startActivity(intent);
     }
 
     @Override
@@ -192,7 +207,7 @@ public class GListFragment extends Fragment implements GListContract.View {
 
             //Set all text of this gitem row
             if(gItem != null) {
-                ((TextView) rowView.findViewById(R.id.tvTtitle)).setText(gItem.getProduct().getName());
+                ((TextView) rowView.findViewById(R.id.tvTitle)).setText(gItem.getProduct().getName());
                 if (gItem.getQuantity() != null) {
                     ((TextView) rowView.findViewById(R.id.tvQuantity)).setText(gItem.getQuantity().toString());
                     ((TextView) rowView.findViewById(R.id.tvLabel)).setText(R.string.glist_item_quantity_label);
@@ -247,16 +262,18 @@ public class GListFragment extends Fragment implements GListContract.View {
     GItemListener mItemListener = new GItemListener() {
         @Override
         public void onGItemClick(GItem gItem) {
-            //mPresenter.openTaskDetails(clickedTask);
+            mPresenter.gItemClicked(gItem);
         }
 
         @Override
         public void onItemCheck(GItem gItem) {
+            //TODO
             //mPresenter.completeTask(completedTask);
         }
 
         @Override
         public void onItemUncheck(GItem gItem) {
+            //TODO
             //mPresenter.activateTask(activatedTask);
         }
     };

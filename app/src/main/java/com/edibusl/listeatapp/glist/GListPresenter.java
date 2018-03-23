@@ -32,8 +32,7 @@ public class GListPresenter implements GListContract.Presenter {
 
         mGListView.setPresenter(this);
 
-        //TODO - Take from saved config
-        mCurGListId = 21;
+        mCurGListId = mAppData.GListRepo().getCurrentGListId();
     }
 
     @Override
@@ -65,16 +64,7 @@ public class GListPresenter implements GListContract.Presenter {
     }
 
     @Override
-    public void createGItem(@NonNull GItem gItem) {
-        checkNotNull(gItem, "gItem cannot be null!");
-        
-        //TODO - 
-        //mAppData.GListRepo().createGItem(gItem)
-        
-        loadData();
-    }
-
-    public void deleteGItem(@NonNull long gItemId) {
-        //TODO
+    public void gItemClicked(@NonNull GItem gItem) {
+        mGListView.showGItemInNewActivity(gItem);
     }
 }

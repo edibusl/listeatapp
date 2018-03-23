@@ -4,9 +4,14 @@ import android.util.Log;
 
 import com.edibusl.listeatapp.helpers.GeneralUtils;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
-public class Product {
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+public class Product implements Serializable {
     public static final String LOG_TAG = "Product";
 
     private int product_id;
@@ -14,6 +19,36 @@ public class Product {
     private String description;
     private String image_path;
     private Category category;
+
+    public static List<Product> parseList(JSONObject jsonObject){
+        List<Product> lstProducts = new ArrayList<>();
+        if(jsonObject == null){
+            return lstProducts;
+        }
+
+        try {
+            if (!jsonObject.has("product")) {
+                return lstProducts;
+            }
+
+            //This product list may be returned as a JSONObject if there's a single result
+            //or as JSONArray if there are multiple results
+            Object product = jsonObject.get("product");
+            if(product instanceof JSONObject){
+                lstProducts.add(new Product((JSONObject)product));
+            }else{
+                JSONArray products = (JSONArray)product;
+                for(int i = 0; i < products.length(); i++){
+                    lstProducts.add(new Product(products.getJSONObject(i)));
+                }
+            }
+        }
+        catch(Exception ex){
+            Log.e(LOG_TAG, ex.toString());
+        }
+
+        return lstProducts;
+    }
 
     public Product(JSONObject fromJson){
         if(fromJson == null){

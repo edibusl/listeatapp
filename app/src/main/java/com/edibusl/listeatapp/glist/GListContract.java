@@ -18,6 +18,8 @@ public interface GListContract {
 
         void showGItems(List<GItem> gItems);
 
+        void showGItemInNewActivity(GItem gItem);
+
         void showGListInfo(GList gList);
 
         void setLoadingIndicator(final boolean active);
@@ -27,10 +29,7 @@ public interface GListContract {
 
         void loadData();
 
-        void createGItem(@NonNull GItem gItem);
-
-        void deleteGItem(@NonNull long gItemId);
-
+        void gItemClicked(@NonNull GItem gItem);
 
         /*
         //TODO - Apply search

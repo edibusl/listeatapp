@@ -16,18 +16,24 @@
         android:layout_gravity="center_vertical" />
 
     <TextView
-        android:id="@+id/tvTtitle"
+        android:id="@+id/tvTitle"
         android:layout_width="242dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_marginStart="@dimen/activity_horizontal_margin"
-        android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        />
 
     <LinearLayout
         android:id="@+id/llQuantity"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        >
 
         <TextView
             android:id="@+id/tvQuantity"

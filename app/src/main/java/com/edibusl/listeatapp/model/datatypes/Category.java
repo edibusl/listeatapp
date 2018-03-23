@@ -4,7 +4,9 @@ import android.util.Log;
 
 import org.json.JSONObject;
 
-public class Category {
+import java.io.Serializable;
+
+public class Category implements Serializable {
     public static final String LOG_TAG = "Category";
 
     private int category_id;

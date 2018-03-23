@@ -2,7 +2,7 @@ package com.edibusl.listeatapp.model.repository;
 
 public class AppData {
     //Interface for the use of repositories
-    public static interface LoadDataCallback {
+    public interface LoadDataCallback {
         void onSuccess(Object data);
         void onError(String error);
     }
@@ -19,12 +19,15 @@ public class AppData {
 
 
     private GListRepo mGListRepo = new GListRepo();
+    private ProductRepo mProductRepo = new ProductRepo();
     private UserRepo mUserRepo = new UserRepo();
 
     public GListRepo GListRepo(){
         return mGListRepo;
     }
-
+    public ProductRepo ProductRepo(){
+        return mProductRepo;
+    }
     public UserRepo UserRepo(){
         return mUserRepo;
     }

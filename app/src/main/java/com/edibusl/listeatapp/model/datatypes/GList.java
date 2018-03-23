@@ -5,10 +5,11 @@ import android.util.Log;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GList {
+public class GList implements Serializable {
     public static final String LOG_TAG = "GList";
 
     private long glist_id;
@@ -27,7 +28,18 @@ public class GList {
                 parseGList(fromJson.getJSONObject("gList"));
             }
             if(fromJson.has("gItems")){
-                parseGItems(fromJson.getJSONArray("gItems"));
+                //This gItems list may be returned as a JSONObject if there's a single result
+                //or as JSONArray if there are multiple results
+                Object gItems = fromJson.get("gItems");
+                if(gItems instanceof JSONObject){
+                    JSONArray arr = new JSONArray();
+                    arr.put(0, gItems);
+                    parseGItems(arr);
+                }else{
+                    parseGItems((JSONArray) gItems);
+                }
+
+
             }
         }
         catch(Exception ex){

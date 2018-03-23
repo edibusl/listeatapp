@@ -1,8 +1,20 @@
 package com.edibusl.listeatapp.model.repository;
 
-/**
- * Created by USER on 03/03/2018.
- */
+
+import com.edibusl.listeatapp.model.datatypes.User;
 
 public class UserRepo {
+    private int mCurrentUserId;
+
+    public UserRepo() {
+        //TODO - Load user id
+        mCurrentUserId = 2;
+    }
+
+    public Integer getCurrentUserId() {
+        return mCurrentUserId;
+    }
+    public void setCurrentUserId(int userId) {
+        mCurrentUserId = userId;
+    }
 }

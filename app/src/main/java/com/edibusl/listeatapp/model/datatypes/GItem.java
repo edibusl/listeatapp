@@ -7,21 +7,30 @@ import com.edibusl.listeatapp.helpers.GeneralUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class GItem {
+public class GItem implements Serializable {
     public static final String LOG_TAG = "GItem";
 
-    private int gitem_id;
+    private Integer gitem_id;
+
+    private Integer user_id;
+    private Integer product_id;
+    private Integer glist_id;
+    private Integer cart_id;
+
     private Integer quantity;
     private Integer weight;
     private Date created_time;
     private String comments;
     private boolean is_checked;
     private Product product;
+
+    public GItem(){}
 
     public GItem(JSONObject fromJson){
         if(fromJson == null){
@@ -57,10 +66,59 @@ public class GItem {
         }
     }
 
-    public int getGitemId() {
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        try {
+            if (gitem_id != null) {
+                json.put("gitem_id", gitem_id);
+            }
+
+            if (user_id != null) {
+                json.put("user_id", user_id);
+            }
+
+            if (product_id != null) {
+                json.put("product_id", product_id);
+            }
+
+            if (glist_id != null) {
+                json.put("glist_id", glist_id);
+            }
+
+            if (cart_id != null) {
+                json.put("cart_id", cart_id);
+            }
+
+            if (quantity != null) {
+                json.put("quantity", quantity);
+            }
+
+            if (weight != null) {
+                json.put("weight", weight);
+            }
+
+            if (created_time != null) {
+                json.put("created_time", created_time.toString());
+            }
+
+            if (comments != null) {
+                json.put("comments", comments);
+            }
+
+//            if (is_checked != null) {
+//                json.put("is_checked", is_checked);
+//            }
+        } catch(Exception ex){
+            Log.e(LOG_TAG, "Error converting gItem to JSONObject: " + ex.getMessage());
+        }
+
+        return json;
+    }
+
+    public Integer getGitemId() {
         return gitem_id;
     }
-    public GItem setGitemId(int gitem_id) {
+    public GItem setGitemId(Integer gitem_id) {
         this.gitem_id = gitem_id;
         return this;
     }
@@ -109,5 +167,33 @@ public class GItem {
     public GItem setProduct(Product product){
         this.product = product;
         return this;
+    }
+
+    public Integer getUserId() {
+        return user_id;
+    }
+    public void setUserId(Integer user_id) {
+        this.user_id = user_id;
+    }
+
+    public Integer getProductId() {
+        return product_id;
+    }
+    public void setProductId(Integer product_id) {
+        this.product_id = product_id;
+    }
+
+    public Integer getGlistId() {
+        return glist_id;
+    }
+    public void setGlistId(Integer glist_id) {
+        this.glist_id = glist_id;
+    }
+
+    public Integer getCartId() {
+        return cart_id;
+    }
+    public void setCartId(Integer cart_id) {
+        this.cart_id = cart_id;
     }
 }

@@ -7,20 +7,22 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.edibusl.listeatapp.helpers.VolleyQueue;
 import com.edibusl.listeatapp.model.datatypes.GItem;
 import com.edibusl.listeatapp.model.datatypes.GList;
 
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 public class GListRepo {
     //TODO - Move to configs
     private final String BASE_URL = "http://10.100.102.7:9090";
+
+    private int mCurrentGListId = 0;
+
+    public GListRepo() {
+        //TODO - Load from mCurrentGListId from saved config
+        mCurrentGListId = 21;
+    }
 
     public void getGListFullInfo(int glistId, @NonNull final AppData.LoadDataCallback callback) {
         //Instantiate the RequestQueue.
@@ -43,5 +45,40 @@ public class GListRepo {
 
         // Add the request to the RequestQueue.
         VolleyQueue.getInstance().addToRequestQueue(request);
+    }
+
+    public void updateGItem(GItem gItem, @NonNull final AppData.LoadDataCallback callback) {
+        //Instantiate the RequestQueue.
+        String url = String.format("%s/gitem/%s", BASE_URL, String.valueOf(gItem.getGlistId()));
+
+        //Decide about the request method according to edit mode / new mode
+        Integer gItemId = gItem.getGitemId();
+        int method = (gItemId == null || gItemId == 0 ? Request.Method.POST : Request.Method.PUT);
+
+        JsonObjectRequest request = new JsonObjectRequest(method, url, gItem.toJson(),
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        callback.onSuccess(null);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        callback.onError(error.getMessage());
+                    }
+                }
+        );
+        request.setRetryPolicy(VolleyQueue.getInstance().getRetryPolicy());
+
+        // Add the request to the RequestQueue.
+        VolleyQueue.getInstance().addToRequestQueue(request);
+    }
+
+    public int getCurrentGListId() {
+        return mCurrentGListId;
+    }
+    public void setCurrentGListId(int gListId){
+        mCurrentGListId = gListId;
     }
 }

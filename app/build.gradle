@@ -46,4 +46,10 @@ dependencies {
     compile "com.google.guava:guava:24.0-android"
     compile 'com.android.volley:volley:1.1.0'
     compile 'com.shawnlin:number-picker:2.4.6'
+
+    //AWS
+    compile (    'com.amazonaws:aws-android-sdk-mobile-client:2.6.+@aar') { transitive = true; }
+    compile 'com.amazonaws:aws-android-sdk-s3:2.6.+'
+    compile 'com.amazonaws:aws-android-sdk-cognito:2.6.+'
+
 }

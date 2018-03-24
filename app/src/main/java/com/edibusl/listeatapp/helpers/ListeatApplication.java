@@ -7,7 +7,7 @@ public class ListeatApplication extends Application{
     public void onCreate() {
         super.onCreate();
 
-        //Init Volley network manager with the application context
+        //Init manager singletons with the application context
         VolleyQueue.getInstance().init(this);
     }
 }

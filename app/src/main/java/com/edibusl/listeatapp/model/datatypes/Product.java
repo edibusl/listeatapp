@@ -14,7 +14,10 @@ import java.util.List;
 public class Product implements Serializable {
     public static final String LOG_TAG = "Product";
 
-    private int product_id;
+    private Integer product_id;
+    private Integer category_id;
+    private Integer glist_id;
+
     private String name;
     private String description;
     private String image_path;
@@ -50,6 +53,10 @@ public class Product implements Serializable {
         return lstProducts;
     }
 
+    public Product() {
+
+    }
+
     public Product(JSONObject fromJson){
         if(fromJson == null){
             return;
@@ -79,6 +86,39 @@ public class Product implements Serializable {
         catch(Exception ex){
             Log.e(LOG_TAG, ex.toString());
         }
+    }
+
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        try {
+            if (product_id != null) {
+                json.put("product_id", product_id);
+            }
+
+            if (category_id != null) {
+                json.put("category_id", category_id);
+            }
+
+            if (glist_id != null) {
+                json.put("glist_id", glist_id);
+            }
+
+            if (name != null) {
+                json.put("name", name);
+            }
+
+            if (description != null) {
+                json.put("description", description);
+            }
+
+            if (image_path != null) {
+                json.put("image_path", image_path);
+            }
+        } catch(Exception ex){
+            Log.e(LOG_TAG, "Error converting product to JSONObject: " + ex.getMessage());
+        }
+
+        return json;
     }
 
     public int getProduct_id() {
@@ -118,6 +158,22 @@ public class Product implements Serializable {
     }
     public Product setCategory(Category category) {
         this.category = category;
+        return this;
+    }
+
+    public Integer getGlistId() {
+        return glist_id;
+    }
+    public Product setGlistId(Integer glist_id) {
+        this.glist_id = glist_id;
+        return this;
+    }
+
+    public Integer getCategoryId() {
+        return category_id;
+    }
+    public Product setCategoryId(Integer category_id) {
+        this.category_id = category_id;
         return this;
     }
 }

@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
+import com.amazonaws.mobile.client.AWSMobileClient;
 import com.edibusl.listeatapp.R;
 import com.edibusl.listeatapp.helpers.ActivityUtils;
 import com.edibusl.listeatapp.model.repository.AppData;
@@ -21,6 +22,11 @@ public class GListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //TODO - Move this to the initializer activity
+        //Init AWS singleton
+        AWSMobileClient.getInstance().initialize(this).execute();
+
 
         //Set the main content view of this activity
         setContentView(R.layout.glist_activity);

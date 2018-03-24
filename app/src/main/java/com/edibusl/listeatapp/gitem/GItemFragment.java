@@ -1,6 +1,7 @@
 package com.edibusl.listeatapp.gitem;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -17,6 +18,7 @@ import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.Filterable;
 
+import com.edibusl.listeatapp.product.ProductActivity;
 import com.google.common.base.Strings;
 import com.shawnlin.numberpicker.NumberPicker;
 import android.widget.RadioButton;
@@ -90,6 +92,24 @@ public class GItemFragment extends Fragment implements GItemContract.View {
             }
         });
 
+        //Set listener for Delete button click
+        Button btnDelete = root.findViewById(R.id.btnDelete);
+        btnDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onDeleteButtonClicked();
+            }
+        });
+
+        //Set listener for Delete button click
+        Button btnAddProduct = root.findViewById(R.id.btnAddProduct);
+        btnAddProduct.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onAddProductButtonClicked();
+            }
+        });
+
         return root;
     }
 
@@ -145,6 +165,19 @@ public class GItemFragment extends Fragment implements GItemContract.View {
         }
     }
 
+    private void onDeleteButtonClicked(){
+        if(mSelectedProduct == null) {
+            return;
+        }
+
+        mPresenter.deleteGItem(mEditedGItem.getGitemId());
+    }
+
+    private void onAddProductButtonClicked(){
+        Intent intent = new Intent(getContext(), ProductActivity.class);
+        getActivity().startActivityForResult(intent, 1);
+    }
+
     private void onRadioButtonClicked(View view)
     {
         switch(view.getId()) {
@@ -183,13 +216,17 @@ public class GItemFragment extends Fragment implements GItemContract.View {
     }
 
     @Override
+    public void itemDeleted() {
+        Toast.makeText(this.getContext(), R.string.gitem_item_deleted_success, Toast.LENGTH_SHORT).show();
+        getActivity().finish();
+    }
+
+    @Override
     public void showGItem(GItem gItem){
         mEditedGItem = gItem;
 
         //Set auto complete
-        mSelectedProduct = gItem.getProduct();
-        mAutoCompleteAdapter.setSelectedProduct(mSelectedProduct);
-        ((AutoCompleteTextView)getView().findViewById(R.id.autoCompleteProduct)).setText(mAutoCompleteAdapter.getItem(0));
+        setProduct(gItem.getProduct());
 
         //Set weight OR quantity
         if (gItem.getWeight() != null) {
@@ -210,6 +247,13 @@ public class GItemFragment extends Fragment implements GItemContract.View {
         if(gItem.getComments() != null) {
             ((EditText) (getView().findViewById(R.id.editComments))).setText(gItem.getComments());
         }
+    }
+
+    @Override
+    public void setProduct(Product product) {
+        mSelectedProduct = product;
+        mAutoCompleteAdapter.setSelectedProduct(mSelectedProduct);
+        ((AutoCompleteTextView)getView().findViewById(R.id.autoCompleteProduct)).setText(mAutoCompleteAdapter.getItem(0));
     }
 
     @Override

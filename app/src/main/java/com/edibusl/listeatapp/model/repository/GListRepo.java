@@ -3,6 +3,7 @@ package com.edibusl.listeatapp.model.repository;
 
 import android.support.annotation.NonNull;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -12,6 +13,9 @@ import com.edibusl.listeatapp.model.datatypes.GItem;
 import com.edibusl.listeatapp.model.datatypes.GList;
 
 import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class GListRepo {
     //TODO - Move to configs
@@ -49,7 +53,7 @@ public class GListRepo {
 
     public void updateGItem(GItem gItem, @NonNull final AppData.LoadDataCallback callback) {
         //Instantiate the RequestQueue.
-        String url = String.format("%s/gitem/%s", BASE_URL, String.valueOf(gItem.getGlistId()));
+        String url = String.format("%s/gitem", BASE_URL);
 
         //Decide about the request method according to edit mode / new mode
         Integer gItemId = gItem.getGitemId();
@@ -69,6 +73,36 @@ public class GListRepo {
                     }
                 }
         );
+        request.setRetryPolicy(VolleyQueue.getInstance().getRetryPolicy());
+
+        // Add the request to the RequestQueue.
+        VolleyQueue.getInstance().addToRequestQueue(request);
+    }
+
+    public void deleteGItem(long gItemId, @NonNull final AppData.LoadDataCallback callback) {
+        //Instantiate the RequestQueue.
+        String url = String.format("%s/gitem/%s", BASE_URL, gItemId);
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.DELETE, url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        callback.onSuccess(null);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        callback.onError(error.getMessage());
+                    }
+                }
+        ){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                //Set content-type header since a DELETE method without it will fail
+                return VolleyQueue.getInstance().getDefaultHeaders();
+            }
+        };
         request.setRetryPolicy(VolleyQueue.getInstance().getRetryPolicy());
 
         // Add the request to the RequestQueue.

@@ -25,6 +25,17 @@
     <string name="gitem_weight_hint">גרם</string>
     <string name="gitem_item_added_success">המוצר התווסף לרשימה</string>
     <string name="gitem_item_updated_success">המוצר עודכן</string>
+    <string name="gitem_item_deleted_success">המוצר הוסר</string>
     <string name="gitem_missing_product">יש לבחור מוצר</string>
     <string name="gitem_missing_weight">יש להזין משקל</string>
+    <string name="gitem_add_product_btn_text">+</string>
+
+    <!-- Product Fragment-->
+    <string name="product_category_label">קטגוריה</string>
+    <string name="product_tooltip_category_autocomplete">בחר קטגוריה</string>
+    <string name="product_description_label">תיאור:</string>
+    <string name="product_name_label">שם המוצר:</string>
+    <string name="product_added_success">המוצר החדש נוצר</string>
+    <string name="product_header_title_add">יצירת מוצר חדש</string>
+    <string name="product_image_choose_label">צלם תמונה (אופציונלי)</string>
 </resources>

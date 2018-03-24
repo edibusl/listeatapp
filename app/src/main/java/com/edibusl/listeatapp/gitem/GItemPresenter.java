@@ -81,6 +81,31 @@ public class GItemPresenter implements GItemContract.Presenter {
         });
     }
 
+    @Override
+    public void deleteGItem(long gItemId) {
+        //Send the request to server
+        mAppData.GListRepo().deleteGItem(gItemId, new AppData.LoadDataCallback() {
+            @Override
+            public void onSuccess(Object data) {
+                mGItemView.itemDeleted();
+            }
+
+            @Override
+            public void onError(String error) {
+                Log.e(LOG_TAG, "Error when deleting gitem");
+            }
+        });
+    }
+
+    @Override
+    public void setProduct(Product product) {
+        if(product == null) {
+            return;
+        }
+
+        mGItemView.setProduct(product);
+    }
+
     private void setGItemFKFields(GItem gItem) {
         gItem.setGlistId(mAppData.GListRepo().getCurrentGListId());
         gItem.setUserId(mAppData.UserRepo().getCurrentUserId());
@@ -90,7 +115,7 @@ public class GItemPresenter implements GItemContract.Presenter {
     public List<Product> searchProduct(String text) {
         List<Product> products;
         try {
-            products = mAppData.ProductRepo().getProductsByAutoComplete(text);
+            products = mAppData.ProductRepo().getProductsByAutoComplete(mAppData.GListRepo().getCurrentGListId(), text);
         }
         catch(Exception ex){
             Log.e(LOG_TAG, "Error when searching for a product by auto complete: " + ex.getMessage());

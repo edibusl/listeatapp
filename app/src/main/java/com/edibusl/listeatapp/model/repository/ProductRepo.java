@@ -1,6 +1,7 @@
 package com.edibusl.listeatapp.model.repository;
 
 
+import android.app.Activity;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -9,7 +10,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.RequestFuture;
+import com.edibusl.listeatapp.helpers.AwsUtils;
 import com.edibusl.listeatapp.helpers.VolleyQueue;
+import com.edibusl.listeatapp.model.datatypes.Category;
+import com.edibusl.listeatapp.model.datatypes.GItem;
 import com.edibusl.listeatapp.model.datatypes.GList;
 import com.edibusl.listeatapp.model.datatypes.Product;
 
@@ -29,9 +33,9 @@ public class ProductRepo {
      * @return A list of products matching the text
      * @throws Exception
      */
-    public List<Product> getProductsByAutoComplete(String text) throws Exception{
+    public List<Product> getProductsByAutoComplete(long gListId, String text) throws Exception{
         //Instantiate the RequestQueue.
-        String url = String.format("%s/product/autocomplete/%s", BASE_URL, text);
+        String url = String.format("%s/product/autocomplete/%s/%s", BASE_URL, gListId, text);
 
         RequestFuture<JSONObject> future = RequestFuture.newFuture();
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, future, future);
@@ -48,5 +52,56 @@ public class ProductRepo {
         } catch (Exception e) {
             throw e;
         }
+    }
+
+    public void getAllCategories(@NonNull final AppData.LoadDataCallback callback) {
+        //Instantiate the RequestQueue.
+        String url = String.format("%s/category/all", BASE_URL);
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        callback.onSuccess(Category.parseList(response));
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        callback.onError(error.getMessage());
+                    }
+                }
+        );
+
+        // Add the request to the RequestQueue.
+        VolleyQueue.getInstance().addToRequestQueue(request);
+    }
+
+    public void createProduct(Product product, @NonNull final AppData.LoadDataCallback callback) {
+        //Instantiate the RequestQueue.
+        String url = String.format("%s/product", BASE_URL);
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, product.toJson(),
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        callback.onSuccess(new Product(response));
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        callback.onError(error.getMessage());
+                    }
+                }
+        );
+        request.setRetryPolicy(VolleyQueue.getInstance().getRetryPolicy());
+
+        // Add the request to the RequestQueue.
+        VolleyQueue.getInstance().addToRequestQueue(request);
+    }
+
+    public void uploadProductThumbnail(Activity activityContext, final String fileFullPath, final String filename) {
+        AwsUtils.getInstance().uploadData(activityContext, fileFullPath, filename);
     }
 }

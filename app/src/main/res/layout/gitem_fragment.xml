@@ -18,21 +18,37 @@
         android:textSize="24sp" />
 
 
-    <AutoCompleteTextView
-        android:id="@+id/autoCompleteProduct"
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layoutDirection="rtl"
-        android:textDirection="rtl"
-        android:hint="@string/gitem_tooltip_product_autocomplete"
-        />
+        android:orientation="horizontal"
+        >
+
+        <AutoCompleteTextView
+            android:id="@+id/autoCompleteProduct"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="50dp"
+            android:hint="@string/gitem_tooltip_product_autocomplete"
+            android:layoutDirection="rtl"
+            android:textDirection="rtl"
+            app:layout_constraintStart_toEndOf="@+id/btnAddProduct" />
+
+        <Button
+            android:id="@+id/btnAddProduct"
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginRight="@dimen/gitem_btn_add_product_right_margin"
+            android:text="@string/gitem_add_product_btn_text" />
+    </android.support.constraint.ConstraintLayout>
 
     <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/radioQuantityWeight"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         >
 
         <RadioButton
@@ -91,7 +107,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="20dp"
         android:labelFor="@+id/editComments"
         android:text="@string/gitem_comments_label" />
 
@@ -100,7 +116,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:layout_marginTop="16dp"
         android:ems="10"
         android:inputType="textMultiLine" />
 

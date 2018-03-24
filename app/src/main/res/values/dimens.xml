@@ -23,4 +23,6 @@
 
     <dimen name="fab_margin">16dp</dimen>
 
+    <dimen name="gitem_btn_add_product_right_margin">8dp</dimen>
+
 </resources>

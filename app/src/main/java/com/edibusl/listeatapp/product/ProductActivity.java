@@ -1,4 +1,4 @@
-package com.edibusl.listeatapp.gitem;
+package com.edibusl.listeatapp.product;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,15 +11,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.edibusl.listeatapp.R;
-import com.edibusl.listeatapp.gitem.GItemFragment;
-import com.edibusl.listeatapp.gitem.GItemPresenter;
 import com.edibusl.listeatapp.helpers.ActivityUtils;
-import com.edibusl.listeatapp.model.datatypes.GItem;
-import com.edibusl.listeatapp.model.datatypes.Product;
 import com.edibusl.listeatapp.model.repository.AppData;
 
-public class GItemActivity extends AppCompatActivity {
-    private GItemPresenter mGItemPresenter;
+public class ProductActivity extends AppCompatActivity {
+    private ProductPresenter mProductPresenter;
     private DrawerLayout mDrawerLayout;
 
     @Override
@@ -27,25 +23,18 @@ public class GItemActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         //Set the main content view of this activity
-        setContentView(R.layout.gitem_activity);
+        setContentView(R.layout.product_activity);
 
         //Create the View - Set the inner fragment and attach it to this activity
-        GItemFragment innerGItemFragment = (GItemFragment)getSupportFragmentManager().findFragmentById(R.id.contentFrame);
-        if (innerGItemFragment == null) {
+        ProductFragment innerProductFragment = (ProductFragment)getSupportFragmentManager().findFragmentById(R.id.contentFrame);
+        if (innerProductFragment == null) {
             // Create the fragment
-            innerGItemFragment = new GItemFragment();
-            ActivityUtils.addFragmentToActivity(getSupportFragmentManager(), innerGItemFragment, R.id.contentFrame);
-        }
-
-        //Handle Edit Mode
-        //Get the Intent that started this activity and extract the GItem
-        GItem gItem = null;
-        if(getIntent().hasExtra("GItem")) {
-            gItem = (GItem)getIntent().getSerializableExtra("GItem");
+            innerProductFragment = new ProductFragment();
+            ActivityUtils.addFragmentToActivity(getSupportFragmentManager(), innerProductFragment, R.id.contentFrame);
         }
 
         //Create the Presenter
-        this.mGItemPresenter = new GItemPresenter(AppData.getInstance(), innerGItemFragment, gItem);
+        this.mProductPresenter = new ProductPresenter(AppData.getInstance(), innerProductFragment);
 
         //Set up the toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -53,11 +42,7 @@ public class GItemActivity extends AppCompatActivity {
         ActionBar ab = getSupportActionBar();
         ab.setHomeAsUpIndicator(R.drawable.ic_menu);
         ab.setDisplayHomeAsUpEnabled(true);
-        if (gItem == null) {
-            ab.setTitle(R.string.gitem_header_title_add);
-        } else {
-            ab.setTitle(R.string.gitem_header_title_edit);
-        }
+        ab.setTitle(R.string.product_header_title_add);
 
         //Set up the navigation drawer
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -80,12 +65,9 @@ public class GItemActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK && data.hasExtra("Product")) {
-            Product product = (Product) data.getSerializableExtra("Product");
-            mGItemPresenter.setProduct(product);
-        }
+    protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
+        super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
+        mProductPresenter.onImageChosen(requestCode, resultCode, imageReturnedIntent);
     }
 
     //TODO - Move this function to a common utils func

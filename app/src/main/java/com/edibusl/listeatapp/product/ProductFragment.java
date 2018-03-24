@@ -145,7 +145,9 @@ public class ProductFragment extends Fragment implements ProductContract.View {
             public void onClick(DialogInterface dialog, int item) {
                 switch (item){
                     case 0:
-
+                        //Take a picture
+                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        getActivity().startActivityForResult(intent, REQUEST_CAMERA);
                         break;
                     case 1:
                         checkPermissions();

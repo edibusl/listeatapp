@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -32,6 +33,8 @@ import com.edibusl.listeatapp.gitem.GItemActivity;
 import com.edibusl.listeatapp.model.datatypes.Category;
 import com.edibusl.listeatapp.model.datatypes.GItem;
 import com.edibusl.listeatapp.model.datatypes.GList;
+import com.google.common.base.Strings;
+import com.squareup.picasso.Picasso;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -47,7 +50,7 @@ public class GListFragment extends Fragment implements GListContract.View {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mListAdapter = new GItemsAdapter(new ArrayList<GItem>(0), mItemListener);
+        mListAdapter = new GItemsAdapter(new ArrayList<GItem>(0), mItemListener, mPresenter);
     }
 
     @Nullable
@@ -140,10 +143,12 @@ public class GListFragment extends Fragment implements GListContract.View {
     private static class GItemsAdapter extends BaseAdapter {
         private List<Object> mItems;
         private GItemListener mItemListener;
+        private GListContract.Presenter mItemPresenter;
 
-        public GItemsAdapter(List<GItem> gItems, GItemListener itemListener) {
+        public GItemsAdapter(List<GItem> gItems, GItemListener itemListener, GListContract.Presenter presenter) {
             setList(gItems);
             mItemListener = itemListener;
+            mItemPresenter = presenter;
         }
 
         public void replaceData(List<GItem> gItems) {
@@ -207,7 +212,10 @@ public class GListFragment extends Fragment implements GListContract.View {
 
             //Set all text of this gitem row
             if(gItem != null) {
+                //Product name
                 ((TextView) rowView.findViewById(R.id.tvTitle)).setText(gItem.getProduct().getName());
+
+                //Quantity / Weight
                 if (gItem.getQuantity() != null) {
                     ((TextView) rowView.findViewById(R.id.tvQuantity)).setText(gItem.getQuantity().toString());
                     ((TextView) rowView.findViewById(R.id.tvLabel)).setText(R.string.glist_item_quantity_label);
@@ -218,9 +226,27 @@ public class GListFragment extends Fragment implements GListContract.View {
                     ((LinearLayout) rowView.findViewById(R.id.llQuantity)).setVisibility(View.INVISIBLE);
                 }
 
-                CheckBox completeCB = (CheckBox) rowView.findViewById(R.id.cbComplete);
+                //Description
+                String comments = gItem.getComments();
+                if(!Strings.isNullOrEmpty(comments)) {
+                    TextView tvComments = rowView.findViewById(R.id.tvDescription);
+                    tvComments.setText(comments);
+                    tvComments.setVisibility(View.VISIBLE);
+                }
 
-                // Active/completed task UI
+                //Thumbnail
+                String imageUrl = gItem.getProduct().getImage_path();
+                if(!Strings.isNullOrEmpty(imageUrl)) {
+                    ImageView imgViewThumbnail = rowView.findViewById(R.id.imgThumbnail);
+                    imgViewThumbnail.setVisibility(View.VISIBLE);
+
+                    //Download image from url, cache it and save into image view (Using Picasso)
+                    String url = mItemPresenter.getProductImageFullPath(imageUrl);
+                    Picasso.get().load(url).into(imgViewThumbnail);
+                }
+
+                //Complete checkbox
+                CheckBox completeCB = (CheckBox) rowView.findViewById(R.id.cbComplete);
                 completeCB.setChecked(gItem.getIsChecked());
                 if (gItem.getIsChecked()) {
                     rowView.setBackgroundDrawable(viewGroup.getContext()
@@ -229,7 +255,6 @@ public class GListFragment extends Fragment implements GListContract.View {
                     rowView.setBackgroundDrawable(viewGroup.getContext()
                             .getResources().getDrawable(R.drawable.glist_touch_feedback));
                 }
-
                 final GItem gItemFinal = gItem;
                 completeCB.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -242,6 +267,7 @@ public class GListFragment extends Fragment implements GListContract.View {
                     }
                 });
 
+                //Register to clicks
                 rowView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {

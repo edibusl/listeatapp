@@ -12,7 +12,6 @@
         android:id="@+id/tvCategory"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
         android:labelFor="@+id/autoCompleteCategory"
         android:text="@string/product_category_label"
         android:textSize="24sp" />
@@ -31,6 +30,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
+        android:layout_marginTop="20dp"
         android:labelFor="@+id/editName"
         android:text="@string/product_name_label" />
 
@@ -90,6 +90,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="30dp"
+            android:textAlignment="center"
             android:text="@string/gitem_save_create" />
 
     </LinearLayout>

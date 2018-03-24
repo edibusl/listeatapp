@@ -67,4 +67,9 @@ public class GListPresenter implements GListContract.Presenter {
     public void gItemClicked(@NonNull GItem gItem) {
         mGListView.showGItemInNewActivity(gItem);
     }
+
+    @Override
+    public String getProductImageFullPath(String imagePath) {
+        return mAppData.ProductRepo().getProductThumbnailUrl(imagePath);
+    }
 }

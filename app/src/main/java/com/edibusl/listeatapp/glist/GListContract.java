@@ -31,6 +31,8 @@ public interface GListContract {
 
         void gItemClicked(@NonNull GItem gItem);
 
+        String getProductImageFullPath(String imagePath);
+
         /*
         //TODO - Apply search
         void setFiltering(TasksFilterType requestType);

@@ -45,12 +45,12 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class ProductFragment extends Fragment implements ProductContract.View {
     public static final String LOG_TAG = "ProductFragment";
     private static final int REQUEST_CAMERA = 1;
-    private static final int REQUEST_CHOOSE_GALLERY = 2;
 
     private ProductContract.Presenter mPresenter;
     private AutoCompleteAdapterCategory mAutoCompleteAdapter;
     private Category mSelectedCategory;
     private ImageView mImageThumbnail;
+    private String mThumbnailImageFileName;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -104,7 +104,6 @@ public class ProductFragment extends Fragment implements ProductContract.View {
         return root;
     }
 
-
     private void onSaveButtonClicked(){
         //Validate product selected
         if(mSelectedCategory == null) {
@@ -127,55 +126,18 @@ public class ProductFragment extends Fragment implements ProductContract.View {
         String description = ((EditText)(getView().findViewById(R.id.editDescription))).getText().toString();
         product.setDescription(description);
 
+        //Image
+        if(mThumbnailImageFileName != null) {
+            product.setImage_path(mThumbnailImageFileName);
+        }
+
         mPresenter.createProduct(product);
     }
 
     private void onChooseImageButtonClicked() {
-        final CharSequence[] items = {
-                getResources().getString(R.string.product_image_menu_take_photo),
-                getResources().getString(R.string.product_image_menu_choose),
-                getResources().getString(R.string.product_image_menu_cancel)
-        };
-
-        //Show a dialog box to choose Taking a picture / Choosing a picture from gallery
-        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getActivity());
-        builder.setTitle(getResources().getString(R.string.product_image_menu_title));
-        builder.setItems(items, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int item) {
-                switch (item){
-                    case 0:
-                        //Take a picture
-                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        getActivity().startActivityForResult(intent, REQUEST_CAMERA);
-                        break;
-                    case 1:
-                        checkPermissions();
-
-                        //Choose from gallery
-                        Intent intent2 = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                        getActivity().startActivityForResult(intent2, REQUEST_CHOOSE_GALLERY);
-                        break;
-                    case 2:
-                        dialog.dismiss();
-                }
-            }
-        });
-        builder.show();
-    }
-
-    private void checkPermissions() {
-        // Here, thisActivity is the current activity
-        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-               // No explanation needed; request the permission
-                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_CONTACTS}, 1);
-
-                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                // app-defined int constant. The callback method gets the
-                // result of the request.
-        } else {
-            // Permission has already been granted
-        }
+        //Take a picture
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        getActivity().startActivityForResult(intent, REQUEST_CAMERA);
     }
 
     @Override
@@ -188,21 +150,28 @@ public class ProductFragment extends Fragment implements ProductContract.View {
         String destFilename = null;
 
         if(requestCode == REQUEST_CAMERA) {
+            //Get generated thumbnail
             Bundle extras = imageReturnedIntent.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
 
             destFilename = String.format("%s/%s", getContext().getFilesDir(), filename);
+
+            //Save the thumbnail in internal storage (local app files)
             GeneralUtils.saveBitmapToFile(imageBitmap, destFilename);
+
+            //Show the picture in the image view
             mImageThumbnail.setImageBitmap(imageBitmap);
-        } else if(requestCode == REQUEST_CHOOSE_GALLERY) {
-            Uri selectedImage = imageReturnedIntent.getData();
-            destFilename = GeneralUtils.getRealPathFromUri(getActivity(), selectedImage);
-            mImageThumbnail.setImageURI(selectedImage);
         }
 
+        //Upload the file to server
         if(destFilename != null) {
             mPresenter.uploadThumbnailImage(getActivity(), destFilename, filename);
         }
+
+        //Set image filename for later use when saving product
+        mThumbnailImageFileName = filename;
+
+        //TODO - Switch the "upload image" button to "remove image"
     }
 
     @Override

@@ -26,6 +26,7 @@ import java.util.concurrent.ExecutionException;
 public class ProductRepo {
     //TODO - Move to configs
     private final String BASE_URL = "http://10.100.102.7:9090";
+    private static final String PRODUCT_THUMBNAIL_BASE_URL = "https://s3.eu-central-1.amazonaws.com/listeatapp-userfiles-mobilehub-1030236591/public";
 
     /**
      * A blocking call to get auto complete results of a products list
@@ -103,5 +104,9 @@ public class ProductRepo {
 
     public void uploadProductThumbnail(Activity activityContext, final String fileFullPath, final String filename) {
         AwsUtils.getInstance().uploadData(activityContext, fileFullPath, filename);
+    }
+
+    public String getProductThumbnailUrl(String imageName) {
+        return String.format("%s/%s", PRODUCT_THUMBNAIL_BASE_URL, imageName);
     }
 }

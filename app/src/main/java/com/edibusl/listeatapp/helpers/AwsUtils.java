@@ -2,6 +2,7 @@ package com.edibusl.listeatapp.helpers;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 
 import com.amazonaws.mobile.client.AWSMobileClient;
 import com.amazonaws.mobile.client.AWSStartupHandler;
@@ -16,11 +17,13 @@ import java.io.File;
 
 
 public class AwsUtils {
-    private static AwsUtils mInstance;
+    private static final String LOG_TAG = "AwsUtils";
     private static final String S3_FOLDER = "public";
 
     private Activity mCurContext;
 
+    //Singleton declarations
+    private static AwsUtils mInstance;
     private AwsUtils() {}
     public static synchronized AwsUtils getInstance() {
         if (mInstance == null) {
@@ -55,11 +58,10 @@ public class AwsUtils {
         // Attach a listener to the observer to get notified of the
         // updates in the state and the progress
         uploadObserver.setTransferListener(new TransferListener() {
-
             @Override
             public void onStateChanged(int id, TransferState state) {
                 if (TransferState.COMPLETED == state) {
-                    //TODO -
+                    Log.i(LOG_TAG, "Completed uploading file");
                 }
             }
 
@@ -67,29 +69,13 @@ public class AwsUtils {
             public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) {
                 float percentDonef = ((float) bytesCurrent / (float) bytesTotal) * 100;
                 int percentDone = (int)percentDonef;
-
-                //TODO
-//                Log.d("YourActivity", "ID:" + id + " bytesCurrent: " + bytesCurrent
-//                        + " bytesTotal: " + bytesTotal + " " + percentDone + "%");
+                Log.d(LOG_TAG, "ID:" + id + " bytesCurrent: " + bytesCurrent + " bytesTotal: " + bytesTotal + " " + percentDone + "%");
             }
 
             @Override
             public void onError(int id, Exception ex) {
-                // TODO - Handle errors
-                int x = 1;
-                x++;
+                Log.e(LOG_TAG,"Error when uploading file to S3: " + ex.toString());
             }
-
         });
-
-        // If you do not want to attach a listener and poll for the data
-        // from the observer, you can check for the state and the progress
-        // in the observer.
-        if (TransferState.COMPLETED == uploadObserver.getState()) {
-            // Handle a completed upload.
-        }
-
-//        Log.d("YourActivity", "Bytes Transferrred: " + uploadObserver.getBytesTransferred());
-//        Log.d("YourActivity", "Bytes Total: " + uploadObserver.getBytesTotal());
     }
 }

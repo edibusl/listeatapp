@@ -1,4 +1,4 @@
-package com.edibusl.listeatapp.gitem;
+package com.edibusl.listeatapp.components.gitem;
 
 import android.content.Context;
 import android.content.Intent;
@@ -18,7 +18,7 @@ import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.Filterable;
 
-import com.edibusl.listeatapp.product.ProductActivity;
+import com.edibusl.listeatapp.components.product.ProductActivity;
 import com.google.common.base.Strings;
 import com.shawnlin.numberpicker.NumberPicker;
 import android.widget.RadioButton;
@@ -29,7 +29,6 @@ import com.edibusl.listeatapp.model.datatypes.GItem;
 import com.edibusl.listeatapp.model.datatypes.Product;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 

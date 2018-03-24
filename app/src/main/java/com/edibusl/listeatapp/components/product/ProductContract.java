@@ -1,11 +1,10 @@
-package com.edibusl.listeatapp.product;
+package com.edibusl.listeatapp.components.product;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 
 import com.edibusl.listeatapp.model.datatypes.Category;
-import com.edibusl.listeatapp.model.datatypes.GItem;
 import com.edibusl.listeatapp.model.datatypes.Product;
 import com.edibusl.listeatapp.mvp.BasePresenter;
 import com.edibusl.listeatapp.mvp.BaseView;

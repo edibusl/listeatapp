@@ -16,17 +16,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".glist.GListActivity">
+        <activity android:name=".components.glist.GListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".gitem.GItemActivity"
-            android:parentActivityName=".glist.GListActivity">
+        <activity android:name=".components.gitem.GItemActivity"
+            android:parentActivityName=".components.glist.GListActivity">
         </activity>
-        <activity android:name=".product.ProductActivity"
-            android:parentActivityName=".gitem.GItemActivity">
+        <activity android:name=".components.product.ProductActivity"
+            android:parentActivityName=".components.gitem.GItemActivity">
         </activity>
 
         <service android:name="com.amazonaws.mobileconnectors.s3.transferutility.TransferService" android:enabled="true" />

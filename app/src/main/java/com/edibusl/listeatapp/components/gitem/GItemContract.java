@@ -1,8 +1,7 @@
-package com.edibusl.listeatapp.gitem;
+package com.edibusl.listeatapp.components.gitem;
 
 import android.support.annotation.NonNull;
 
-import com.edibusl.listeatapp.helpers.GeneralUtils;
 import com.edibusl.listeatapp.model.datatypes.GItem;
 import com.edibusl.listeatapp.model.datatypes.Product;
 import com.edibusl.listeatapp.mvp.BasePresenter;

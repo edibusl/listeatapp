@@ -1,17 +1,11 @@
-package com.edibusl.listeatapp.glist;
+package com.edibusl.listeatapp.components.glist;
 
-import android.app.Activity;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.edibusl.listeatapp.model.datatypes.GItem;
 import com.edibusl.listeatapp.model.datatypes.GList;
 import com.edibusl.listeatapp.model.repository.AppData;
-        
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 

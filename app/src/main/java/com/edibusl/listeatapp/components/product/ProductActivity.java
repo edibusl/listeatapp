@@ -1,4 +1,4 @@
-package com.edibusl.listeatapp.product;
+package com.edibusl.listeatapp.components.product;
 
 import android.content.Intent;
 import android.os.Bundle;

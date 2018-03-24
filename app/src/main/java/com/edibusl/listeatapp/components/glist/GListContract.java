@@ -1,4 +1,4 @@
-package com.edibusl.listeatapp.glist;
+package com.edibusl.listeatapp.components.glist;
 
 import android.support.annotation.NonNull;
 

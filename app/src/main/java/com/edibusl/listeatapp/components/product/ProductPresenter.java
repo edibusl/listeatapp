@@ -1,4 +1,4 @@
-package com.edibusl.listeatapp.product;
+package com.edibusl.listeatapp.components.product;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -9,7 +9,6 @@ import com.edibusl.listeatapp.model.datatypes.Category;
 import com.edibusl.listeatapp.model.datatypes.Product;
 import com.edibusl.listeatapp.model.repository.AppData;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;

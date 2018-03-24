@@ -1,4 +1,4 @@
-package com.edibusl.listeatapp.gitem;
+package com.edibusl.listeatapp.components.gitem;
 
 import android.support.annotation.NonNull;
 import android.util.Log;

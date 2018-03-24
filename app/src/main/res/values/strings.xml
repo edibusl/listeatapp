@@ -38,4 +38,7 @@
     <string name="product_added_success">המוצר החדש נוצר</string>
     <string name="product_header_title_add">יצירת מוצר חדש</string>
     <string name="product_image_choose_label">צלם תמונה (אופציונלי)</string>
+
+    <!-- GListManage fragment -->
+    <string name="glist_manage_title">ניהול רשימות</string>
 </resources>

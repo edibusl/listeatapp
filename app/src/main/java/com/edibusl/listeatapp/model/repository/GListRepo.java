@@ -51,6 +51,29 @@ public class GListRepo {
         VolleyQueue.getInstance().addToRequestQueue(request);
     }
 
+    public void getAllUserGLists(int userId, @NonNull final AppData.LoadDataCallback callback) {
+        //Instantiate the RequestQueue.
+        String url = String.format("%s/glist/all/%s", BASE_URL, String.valueOf(userId));
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        callback.onSuccess(GList.parseList(response));
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        callback.onError(error.getMessage());
+                    }
+                }
+        );
+
+        // Add the request to the RequestQueue.
+        VolleyQueue.getInstance().addToRequestQueue(request);
+    }
+
     public void updateGItem(GItem gItem, @NonNull final AppData.LoadDataCallback callback) {
         //Instantiate the RequestQueue.
         String url = String.format("%s/gitem", BASE_URL);

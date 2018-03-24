@@ -1,23 +1,21 @@
-package com.edibusl.listeatapp.components.glist;
+package com.edibusl.listeatapp.components.glistmanage;
 
-import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.amazonaws.mobile.client.AWSMobileClient;
 import com.edibusl.listeatapp.R;
-import com.edibusl.listeatapp.components.glistmanage.GListManageActivity;
 import com.edibusl.listeatapp.helpers.ActivityUtils;
 import com.edibusl.listeatapp.model.repository.AppData;
 
-public class GListActivity extends AppCompatActivity {
-    private GListPresenter mGListPresenter;
+public class GListManageActivity extends AppCompatActivity {
+    private GListManagePresenter mGListManagePresenter;
     private DrawerLayout mDrawerLayout;
 
     @Override
@@ -33,15 +31,15 @@ public class GListActivity extends AppCompatActivity {
         setContentView(R.layout.glist_activity);
 
         //Create the View - Set the inner fragment and attach it to this activity
-        GListFragment innerGListFragment = (GListFragment)getSupportFragmentManager().findFragmentById(R.id.contentFrame);
-        if (innerGListFragment == null) {
+        GListManageFragment innerGListManageFragment = (GListManageFragment)getSupportFragmentManager().findFragmentById(R.id.contentFrame);
+        if (innerGListManageFragment == null) {
             // Create the fragment
-            innerGListFragment = new GListFragment();
-            ActivityUtils.addFragmentToActivity(getSupportFragmentManager(), innerGListFragment, R.id.contentFrame);
+            innerGListManageFragment = new GListManageFragment();
+            ActivityUtils.addFragmentToActivity(getSupportFragmentManager(), innerGListManageFragment, R.id.contentFrame);
         }
 
         //Create the Presenter
-        mGListPresenter = new GListPresenter(AppData.getInstance(), innerGListFragment);
+        this.mGListManagePresenter = new GListManagePresenter(AppData.getInstance(), innerGListManageFragment);
 
         //Set up the toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -49,7 +47,7 @@ public class GListActivity extends AppCompatActivity {
         ActionBar ab = getSupportActionBar();
         ab.setHomeAsUpIndicator(R.drawable.ic_menu);
         ab.setDisplayHomeAsUpEnabled(true);
-        ab.setTitle("רשימת מכולת 1");
+        ab.setTitle(getResources().getString(R.string.glist_manage_title));
 
         //Set up the navigation drawer
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -79,11 +77,12 @@ public class GListActivity extends AppCompatActivity {
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
                         switch (menuItem.getItemId()) {
                             case R.id.glist_navigation_menu_item:
-                                Intent intent = new Intent(GListActivity.this, GListManageActivity.class);
-                                startActivity(intent);
+                                // Do nothing, we're already on that screen
                                 break;
                             case R.id.statistics_navigation_menu_item:
                                 //TODO
+//                                Intent intent = new Intent(TasksActivity.this, StatisticsActivity.class);
+//                                startActivity(intent);
                                 break;
                             default:
                                 break;

@@ -2,6 +2,8 @@ package com.edibusl.listeatapp.model.datatypes;
 
 import android.util.Log;
 
+import com.edibusl.listeatapp.mvp.BaseModel;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -9,7 +11,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GList implements Serializable {
+public class GList extends BaseModel<GList> implements Serializable {
     public static final String LOG_TAG = "GList";
 
     private long glist_id;
@@ -17,6 +19,17 @@ public class GList implements Serializable {
     private String description;
     private List<User> users = new ArrayList<User>();
     private List<GItem> gitems = new ArrayList<GItem>();
+
+    public static List<GList> parseList(JSONObject jsonObject){
+        return BaseModel.parseList(jsonObject, "gList", new GList());
+    }
+
+    @Override
+    public GList createInstance(JSONObject fromJson) {
+        return new GList(fromJson);
+    }
+
+    public GList() {}
 
     public GList(JSONObject fromJson){
         if(fromJson == null){
@@ -38,8 +51,11 @@ public class GList implements Serializable {
                 }else{
                     parseGItems((JSONArray) gItems);
                 }
+            }
 
-
+            //If this is a flat glist object, try to parse it immediately
+            if(fromJson.has("subject")) {
+                parseGList(fromJson);
             }
         }
         catch(Exception ex){

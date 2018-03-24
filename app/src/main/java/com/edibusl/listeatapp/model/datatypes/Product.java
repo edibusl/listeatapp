@@ -3,6 +3,7 @@ package com.edibusl.listeatapp.model.datatypes;
 import android.util.Log;
 
 import com.edibusl.listeatapp.helpers.GeneralUtils;
+import com.edibusl.listeatapp.mvp.BaseModel;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -11,7 +12,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Product implements Serializable {
+public class Product extends BaseModel<Product> implements Serializable {
     public static final String LOG_TAG = "Product";
 
     private Integer product_id;
@@ -24,38 +25,16 @@ public class Product implements Serializable {
     private Category category;
 
     public static List<Product> parseList(JSONObject jsonObject){
-        List<Product> lstProducts = new ArrayList<>();
-        if(jsonObject == null){
-            return lstProducts;
-        }
-
-        try {
-            if (!jsonObject.has("product")) {
-                return lstProducts;
-            }
-
-            //This product list may be returned as a JSONObject if there's a single result
-            //or as JSONArray if there are multiple results
-            Object product = jsonObject.get("product");
-            if(product instanceof JSONObject){
-                lstProducts.add(new Product((JSONObject)product));
-            }else{
-                JSONArray products = (JSONArray)product;
-                for(int i = 0; i < products.length(); i++){
-                    lstProducts.add(new Product(products.getJSONObject(i)));
-                }
-            }
-        }
-        catch(Exception ex){
-            Log.e(LOG_TAG, ex.toString());
-        }
-
-        return lstProducts;
+        return BaseModel.parseList(jsonObject, "product", new Product());
     }
 
-    public Product() {
-
+    @Override
+    public Product createInstance(JSONObject fromJson) {
+        return new Product(fromJson);
     }
+
+
+    public Product() {}
 
     public Product(JSONObject fromJson){
         if(fromJson == null){

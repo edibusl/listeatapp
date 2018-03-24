@@ -6,7 +6,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layoutDirection="rtl"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingRight="10dp"
+    >
 
     <TextView
         android:id="@+id/tvCategory"
@@ -83,13 +85,14 @@
         android:orientation="horizontal"
         android:layoutDirection="rtl"
         android:layout_gravity="center"
+        android:layout_marginTop="30dp"
+        android:gravity="center_vertical"
         >
         <Button
             android:id="@+id/btnSave"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="30dp"
             android:textAlignment="center"
             android:text="@string/gitem_save_create" />
 

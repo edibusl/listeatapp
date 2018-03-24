@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layoutDirection="rtl"
+    android:paddingRight="10dp"
     android:orientation="vertical">
 
     <TextView
@@ -48,7 +49,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="30dp"
         >
 
         <RadioButton
@@ -107,7 +108,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="30dp"
         android:labelFor="@+id/editComments"
         android:text="@string/gitem_comments_label" />
 
@@ -124,13 +125,15 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layoutDirection="rtl"
+        android:layout_gravity="center"
+        android:layout_marginTop="30dp"
+        android:gravity="center"
         >
         <Button
             android:id="@+id/btnSave"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="20dp"
             android:text="@string/gitem_save_create" />
 
         <Button
@@ -138,7 +141,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="20dp"
             android:text="@string/gitem_delete"
             android:visibility="gone"
             />

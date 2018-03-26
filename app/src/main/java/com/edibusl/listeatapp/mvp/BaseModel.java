@@ -49,4 +49,6 @@ public abstract class BaseModel<T> {
     }
 
     public abstract T createInstance(JSONObject fromJson);
+
+    public abstract JSONObject toJson();
 }

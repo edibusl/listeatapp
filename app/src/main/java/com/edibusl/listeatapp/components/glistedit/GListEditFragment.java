@@ -1,4 +1,4 @@
-package com.edibusl.listeatapp.components.gitem;
+package com.edibusl.listeatapp.components.glistedit;
 
 import android.content.Context;
 import android.content.Intent;
@@ -22,23 +22,24 @@ import com.edibusl.listeatapp.components.product.ProductActivity;
 import com.google.common.base.Strings;
 import com.shawnlin.numberpicker.NumberPicker;
 import android.widget.RadioButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.edibusl.listeatapp.R;
-import com.edibusl.listeatapp.model.datatypes.GItem;
+import com.edibusl.listeatapp.model.datatypes.GList;
 import com.edibusl.listeatapp.model.datatypes.Product;
 
 import java.util.ArrayList;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-public class GItemFragment extends Fragment implements GItemContract.View {
-    public static final String LOG_TAG = "GItemFragment";
+public class GListEditFragment extends Fragment implements GListEditContract.View {
+    public static final String LOG_TAG = "GListEditFragment";
 
-    private GItemContract.Presenter mPresenter;
+    private GListEditContract.Presenter mPresenter;
     private AutoCompleteAdapter mAutoCompleteAdapter;
     private Product mSelectedProduct;
-    private GItem mEditedGItem;
+    private GList mEditedGList;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,10 +49,10 @@ public class GItemFragment extends Fragment implements GItemContract.View {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.gitem_fragment, container, false);
+        View root = inflater.inflate(R.layout.glist_edit_fragment, container, false);
 
         //Set auto complete text view
-        AutoCompleteTextView autoCompleteTextView = root.findViewById(R.id.autoCompleteProduct);
+        AutoCompleteTextView autoCompleteTextView = root.findViewById(R.id.autoCompleteUser);
         if(mAutoCompleteAdapter == null){
             mAutoCompleteAdapter = new AutoCompleteAdapter(this.getContext(), android.R.layout.simple_dropdown_item_1line, this.mPresenter);
         }
@@ -63,21 +64,6 @@ public class GItemFragment extends Fragment implements GItemContract.View {
             }
         });
 
-        //Set listener for radio buttons click
-        RadioButton radioQuantity = root.findViewById(R.id.radioQuantity);
-        radioQuantity.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onRadioButtonClicked(view);
-            }
-        });
-        RadioButton radioWeight = root.findViewById(R.id.radioWeight);
-        radioWeight.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onRadioButtonClicked(view);
-            }
-        });
 
         //Set listener for Save button click
         Button btnSave = root.findViewById(R.id.btnSave);
@@ -88,104 +74,39 @@ public class GItemFragment extends Fragment implements GItemContract.View {
             }
         });
 
-        //Set listener for Delete button click
-        Button btnDelete = root.findViewById(R.id.btnDelete);
-        btnDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onDeleteButtonClicked();
-            }
-        });
-
-        //Set listener for "Add Product" button click
-        Button btnAddProduct = root.findViewById(R.id.btnAddProduct);
-        btnAddProduct.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onAddProductButtonClicked();
-            }
-        });
 
         return root;
     }
 
-    private boolean isQuantitySelected()
-    {
-        RadioButton radioButton = getView().findViewById(R.id.radioQuantity);
-        return radioButton.isChecked();
-    }
 
     private void onSaveButtonClicked(){
-        //Validate product selected
-        if(mSelectedProduct == null) {
-            Toast.makeText(this.getContext(), R.string.gitem_missing_product, Toast.LENGTH_SHORT).show();
+        //Create a GList object (or take an existing one in case of edie mode) and start filling it
+        GList gList = (mEditedGList != null ? mEditedGList : new GList());
+
+        //Subject - validation and setting
+        EditText editSubject = (EditText)(getView().findViewById(R.id.editSubject));
+        String sSubject = editSubject.getText().toString();
+        if(Strings.isNullOrEmpty(sSubject)) {
+            Toast.makeText(this.getContext(), R.string.glist_edit_no_subject, Toast.LENGTH_SHORT).show();
 
             return;
         }
+        gList.setSubject(sSubject);
 
-        //Create a GItem object (or take an existing one in case of edie mode) and start filling it
-        GItem gItem = (mEditedGItem != null ? mEditedGItem : new GItem());
+        //Description
+        String description = ((EditText)(getView().findViewById(R.id.editDescription))).getText().toString();
+        gList.setDescription(description);
 
-        //Product Id
-        gItem.setProductId(mSelectedProduct.getProduct_id());
-
-        //Comments
-        String comments = ((EditText)(getView().findViewById(R.id.editComments))).getText().toString();
-        gItem.setComments(comments);
-
-        //Weight / Quantity
-        if (isQuantitySelected()) {
-            NumberPicker picker = getView().findViewById(R.id.editQuantity);
-            int quantity = picker.getValue();
-            gItem.setQuantity(quantity);
-            gItem.setWeight(null);
+        if(mEditedGList != null) {
+            mPresenter.updateGList(gList);
         } else {
-            EditText etWeight = getView().findViewById(R.id.editWeight);
-            String sWeight = etWeight.getText().toString();
-            if(Strings.isNullOrEmpty(sWeight)){
-                Toast.makeText(this.getContext(), R.string.gitem_missing_weight, Toast.LENGTH_SHORT).show();
-
-                return;
-            }
-
-            //Parse and set weight
-            int weight = Integer.parseInt(sWeight);
-            gItem.setWeight(weight);
-            gItem.setQuantity(null);
+            mPresenter.createGList(gList);
         }
-
-        if(mEditedGItem != null) {
-            mPresenter.updateGItem(gItem);
-        } else {
-            mPresenter.createGItem(gItem);
-        }
-    }
-
-    private void onDeleteButtonClicked(){
-        if(mSelectedProduct == null) {
-            return;
-        }
-
-        mPresenter.deleteGItem(mEditedGItem.getGitemId());
     }
 
     private void onAddProductButtonClicked(){
         Intent intent = new Intent(getContext(), ProductActivity.class);
         getActivity().startActivityForResult(intent, 1);
-    }
-
-    private void onRadioButtonClicked(View view)
-    {
-        switch(view.getId()) {
-            case R.id.radioWeight:
-                getView().findViewById(R.id.editWeight).setVisibility(View.VISIBLE);
-                getView().findViewById(R.id.editQuantity).setVisibility(View.GONE);
-                break;
-            case R.id.radioQuantity:
-                getView().findViewById(R.id.editWeight).setVisibility(View.GONE);
-                getView().findViewById(R.id.editQuantity).setVisibility(View.VISIBLE);
-                break;
-        }
     }
 
     @Override
@@ -195,79 +116,50 @@ public class GItemFragment extends Fragment implements GItemContract.View {
     }
 
     @Override
-    public void setPresenter(GItemContract.Presenter presenter) {
+    public void setPresenter(GListEditContract.Presenter presenter) {
         mPresenter = checkNotNull(presenter);
     }
 
     @Override
-    public void itemCreated() {
-        Toast.makeText(this.getContext(), R.string.gitem_item_added_success, Toast.LENGTH_SHORT).show();
+    public void glistCreated() {
+        Toast.makeText(this.getContext(), R.string.glist_edit_added_success, Toast.LENGTH_SHORT).show();
         getActivity().finish();
     }
 
     @Override
-    public void itemUpdated() {
-        Toast.makeText(this.getContext(), R.string.gitem_item_updated_success, Toast.LENGTH_SHORT).show();
+    public void glistUpdated() {
+        Toast.makeText(this.getContext(), R.string.glist_edit_edited_success, Toast.LENGTH_SHORT).show();
         getActivity().finish();
     }
 
     @Override
-    public void itemDeleted() {
-        Toast.makeText(this.getContext(), R.string.gitem_item_deleted_success, Toast.LENGTH_SHORT).show();
-        getActivity().finish();
-    }
+    public void showGList(GList gList){
+        mEditedGList = gList;
 
-    @Override
-    public void showGItem(GItem gItem){
-        mEditedGItem = gItem;
-
-        //Set auto complete
-        setProduct(gItem.getProduct());
-
-        //Set weight OR quantity
-        if (gItem.getWeight() != null) {
-            getView().findViewById(R.id.editWeight).setVisibility(View.VISIBLE);
-            getView().findViewById(R.id.editQuantity).setVisibility(View.GONE);
-            ((EditText) (getView().findViewById(R.id.editWeight))).setText(gItem.getWeight().toString());
-            ((RadioButton) (getView().findViewById(R.id.radioWeight))).setChecked(true);
-            ((RadioButton) (getView().findViewById(R.id.radioQuantity))).setChecked(false);
-        } else {
-            getView().findViewById(R.id.editWeight).setVisibility(View.GONE);
-            getView().findViewById(R.id.editQuantity).setVisibility(View.VISIBLE);
-            ((NumberPicker) (getView().findViewById(R.id.editQuantity))).setValue(gItem.getQuantity());
-            ((RadioButton) (getView().findViewById(R.id.radioWeight))).setChecked(false);
-            ((RadioButton) (getView().findViewById(R.id.radioQuantity))).setChecked(true);
+        //Subject
+        if(gList.getSubject() != null) {
+            ((EditText) (getView().findViewById(R.id.editSubject))).setText(gList.getSubject());
         }
 
         //Comments
-        if(gItem.getComments() != null) {
-            ((EditText) (getView().findViewById(R.id.editComments))).setText(gItem.getComments());
+        if(gList.getDescription() != null) {
+            ((EditText) (getView().findViewById(R.id.editDescription))).setText(gList.getDescription());
         }
-    }
-
-    @Override
-    public void setProduct(Product product) {
-        mSelectedProduct = product;
-        mAutoCompleteAdapter.setSelectedProduct(mSelectedProduct);
-        ((AutoCompleteTextView)getView().findViewById(R.id.autoCompleteProduct)).setText(mAutoCompleteAdapter.getItem(0));
     }
 
     @Override
     public void setEditMode() {
         //Save --> Edit
-        ((Button)(getView().findViewById(R.id.btnSave))).setText(R.string.gitem_save_edit);
-
-        //Enable Delete button
-        getView().findViewById(R.id.btnDelete).setVisibility(View.VISIBLE);
+        ((Button)(getView().findViewById(R.id.btnSave))).setText(R.string.glist_edit_edit_btn_text);
     }
 }
 
 class AutoCompleteAdapter extends ArrayAdapter<String> implements Filterable {
     ArrayList<String> mlstItems;
     ArrayList<Product> mlstProducts;
-    GItemContract.Presenter mPresenter;
+    GListEditContract.Presenter mPresenter;
 
-    public AutoCompleteAdapter(Context context, int textViewResourceId, GItemContract.Presenter presenter) {
+    public AutoCompleteAdapter(Context context, int textViewResourceId, GListEditContract.Presenter presenter) {
         super(context, textViewResourceId);
         mlstItems = new ArrayList<>();
         mlstProducts = new ArrayList<>();
@@ -375,6 +267,6 @@ class AutoCompleteAdapter extends ArrayAdapter<String> implements Filterable {
 
     private class GetProductsForAutoCompleteData{
         public String text;
-        public GItemContract.Presenter presenter;
+        public GListEditContract.Presenter presenter;
     }
 }

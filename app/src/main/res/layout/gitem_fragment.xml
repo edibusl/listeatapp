@@ -7,16 +7,18 @@
     android:layout_height="match_parent"
     android:layoutDirection="rtl"
     android:paddingRight="10dp"
+    android:paddingLeft="30dp"
     android:orientation="vertical">
 
     <TextView
         android:id="@+id/tvProduct"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
+        android:layout_marginTop="30dp"
         android:labelFor="@+id/autoCompleteProduct"
         android:text="@string/gitem_product_label"
-        android:textSize="24sp" />
+        android:textSize="18sp"
+        />
 
 
     <android.support.constraint.ConstraintLayout
@@ -29,7 +31,6 @@
             android:id="@+id/autoCompleteProduct"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginStart="50dp"
             android:hint="@string/gitem_tooltip_product_autocomplete"
             android:layoutDirection="rtl"
             android:textDirection="rtl"
@@ -40,7 +41,6 @@
             android:layout_width="40dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:layout_marginRight="@dimen/gitem_btn_add_product_right_margin"
             android:text="@string/gitem_add_product_btn_text" />
     </android.support.constraint.ConstraintLayout>
 
@@ -109,6 +109,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginTop="30dp"
+        android:textSize="18sp"
         android:labelFor="@+id/editComments"
         android:text="@string/gitem_comments_label" />
 

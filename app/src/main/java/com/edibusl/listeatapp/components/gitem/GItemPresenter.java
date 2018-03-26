@@ -82,7 +82,7 @@ public class GItemPresenter implements GItemContract.Presenter {
     }
 
     @Override
-    public void deleteGItem(long gItemId) {
+    public void deleteGItem(Long gItemId) {
         //Send the request to server
         mAppData.GListRepo().deleteGItem(gItemId, new AppData.LoadDataCallback() {
             @Override

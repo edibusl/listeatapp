@@ -20,9 +20,9 @@ public interface GListContract {
 
         void showGItemInNewActivity(GItem gItem);
 
-        void showGListInfo(GList gList);
-
         void setLoadingIndicator(final boolean active);
+
+        void openGListsManage();
     }
 
     interface Presenter extends BasePresenter {

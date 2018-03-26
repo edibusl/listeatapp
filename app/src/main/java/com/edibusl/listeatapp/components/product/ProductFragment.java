@@ -33,9 +33,6 @@ import java.util.UUID;
 import static android.app.Activity.RESULT_OK;
 import static com.google.common.base.Preconditions.checkNotNull;
 
-/**
- * Display a grid of {@link Product}s. User can choose to view all, active or completed tasks.
- */
 public class ProductFragment extends Fragment implements ProductContract.View {
     public static final String LOG_TAG = "ProductFragment";
     private static final int REQUEST_CAMERA = 1;

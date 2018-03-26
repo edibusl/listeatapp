@@ -9,5 +9,6 @@ public class ListeatApplication extends Application{
 
         //Init manager singletons with the application context
         VolleyQueue.getInstance().init(this);
+        ConfigsManager.getInstance().init(this);
     }
 }

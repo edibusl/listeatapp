@@ -21,6 +21,8 @@ public interface GListManageContract {
         void showGListEditInNewActivity(GList gList);
 
         void setLoadingIndicator(final boolean active);
+
+        void glistDeleted();
     }
 
     interface Presenter extends BasePresenter {
@@ -28,5 +30,7 @@ public interface GListManageContract {
         void loadData();
 
         void glistClicked(@NonNull GList item);
+
+        void deleteGListClicked(@NonNull GList item);
     }
 }

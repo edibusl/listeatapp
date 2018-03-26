@@ -1,44 +1,47 @@
-package com.edibusl.listeatapp.components.glist;
+package com.edibusl.listeatapp.components.glistedit;
 
-import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
-import com.amazonaws.mobile.client.AWSMobileClient;
 import com.edibusl.listeatapp.R;
-import com.edibusl.listeatapp.components.glistmanage.GListManageActivity;
 import com.edibusl.listeatapp.helpers.ActivityUtils;
+import com.edibusl.listeatapp.model.datatypes.GList;
 import com.edibusl.listeatapp.model.repository.AppData;
 
-public class GListActivity extends AppCompatActivity {
-    private GListPresenter mGListPresenter;
+public class GListEditActivity extends AppCompatActivity {
+    private GListEditPresenter mGListEditPresenter;
     private DrawerLayout mDrawerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //TODO - Move this to the initializer activity
-        //Init AWS singleton
-        AWSMobileClient.getInstance().initialize(this).execute();
-
-
         //Set the main content view of this activity
-        setContentView(R.layout.glist_activity);
+        setContentView(R.layout.glist_edit_activity);
 
         //Create the View - Set the inner fragment and attach it to this activity
-        GListFragment innerGListFragment = (GListFragment)getSupportFragmentManager().findFragmentById(R.id.contentFrame);
-        if (innerGListFragment == null) {
+        GListEditFragment innerGListEditFragment = (GListEditFragment)getSupportFragmentManager().findFragmentById(R.id.contentFrame);
+        if (innerGListEditFragment == null) {
             // Create the fragment
-            innerGListFragment = new GListFragment();
-            ActivityUtils.addFragmentToActivity(getSupportFragmentManager(), innerGListFragment, R.id.contentFrame);
+            innerGListEditFragment = new GListEditFragment();
+            ActivityUtils.addFragmentToActivity(getSupportFragmentManager(), innerGListEditFragment, R.id.contentFrame);
         }
+
+        //Handle Edit Mode
+        //Get the Intent that started this activity and extract the GList
+        GList gList = null;
+        if(getIntent().hasExtra("GList")) {
+            gList = (GList)getIntent().getSerializableExtra("GList");
+        }
+
+        //Create the Presenter
+        this.mGListEditPresenter = new GListEditPresenter(AppData.getInstance(), innerGListEditFragment, gList);
 
         //Set up the toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -46,9 +49,11 @@ public class GListActivity extends AppCompatActivity {
         ActionBar ab = getSupportActionBar();
         ab.setHomeAsUpIndicator(R.drawable.ic_menu);
         ab.setDisplayHomeAsUpEnabled(true);
-
-        //Create the Presenter
-        mGListPresenter = new GListPresenter(AppData.getInstance(), innerGListFragment, ab);
+        if (gList == null) {
+            ab.setTitle(R.string.glist_edit_title_add);
+        } else {
+            ab.setTitle(R.string.glist_edit_title_edit);
+        }
 
         //Set up the navigation drawer
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -78,11 +83,12 @@ public class GListActivity extends AppCompatActivity {
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
                         switch (menuItem.getItemId()) {
                             case R.id.glist_navigation_menu_item:
-                                Intent intent = new Intent(GListActivity.this, GListManageActivity.class);
-                                startActivity(intent);
+                                // Do nothing, we're already on that screen
                                 break;
                             case R.id.statistics_navigation_menu_item:
                                 //TODO
+//                                Intent intent = new Intent(TasksActivity.this, StatisticsActivity.class);
+//                                startActivity(intent);
                                 break;
                             default:
                                 break;

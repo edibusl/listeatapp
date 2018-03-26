@@ -12,7 +12,7 @@ import java.util.List;
 public class Category implements Serializable {
     public static final String LOG_TAG = "Category";
 
-    private int category_id;
+    private Long category_id;
     private String name;
     private String description;
 
@@ -53,7 +53,7 @@ public class Category implements Serializable {
 
         try {
             if(fromJson.has("category_id")){
-                this.setCategory_id(fromJson.getInt("category_id"));
+                this.setCategory_id(fromJson.getLong("category_id"));
             }
 
             if(fromJson.has("name")){
@@ -69,10 +69,11 @@ public class Category implements Serializable {
         }
     }
 
-    public int getCategory_id() {
+
+    public Long getCategory_id() {
         return category_id;
     }
-    public Category setCategory_id(int category_id) {
+    public Category setCategory_id(Long category_id) {
         this.category_id = category_id;
         return this;
     }

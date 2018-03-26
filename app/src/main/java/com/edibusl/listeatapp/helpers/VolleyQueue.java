@@ -18,8 +18,9 @@ import java.util.HashMap;
 
 public class VolleyQueue {
     private static VolleyQueue mInstance;
+
     private RequestQueue mRequestQueue;
-    private static Context mCtx;
+    private Context mCtx;
     private RetryPolicy mRetryPolicy;
 
     private final int REQUEST_TIMEOUT_SECONDS = 5;

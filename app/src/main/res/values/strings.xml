@@ -41,4 +41,21 @@
 
     <!-- GListManage fragment -->
     <string name="glist_manage_title">ניהול רשימות</string>
+    <string name="glist_manage_item_deleted">הוסרת מהרשימה</string>
+    <string name="glist_manage_item_delete_sure">האם להסיר אותך מרשימה זו?</string>
+    <string name="glist_manage_item_delete_sure_yes">כן</string>
+    <string name="glist_manage_item_delete_sure_no">לא</string>
+
+    <!-- GListEdit Fragment-->
+    <string name="glist_edit_title_add">יצירת רשימת קניות</string>
+    <string name="glist_edit_title_edit">עריכת פרטי רשימת קניות</string>
+    <string name="glist_edit_subject_label">נושא:</string>
+    <string name="glist_edit_description_label">תיאור:</string>
+    <string name="glist_edit_save_btn_text">צור</string>
+    <string name="glist_edit_edit_btn_text">שמור</string>
+    <string name="glist_edit_user_label">הוסף משתמש לרשימה</string>
+    <string name="glist_edit_user_autocomplete">הקלד אימייל</string>
+    <string name="glist_edit_added_success">רשימת הקניות נוצרה</string>
+    <string name="glist_edit_edited_success">השינויים נשמרו</string>
+    <string name="glist_edit_no_subject">יש להקליד נושא רשימה</string>
 </resources>

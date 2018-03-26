@@ -3,6 +3,7 @@ package com.edibusl.listeatapp.model.datatypes;
 import android.util.Log;
 
 import com.edibusl.listeatapp.helpers.GeneralUtils;
+import com.edibusl.listeatapp.mvp.BaseModel;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -13,15 +14,15 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class GItem implements Serializable {
+public class GItem extends BaseModel<GItem> implements Serializable {
     public static final String LOG_TAG = "GItem";
 
-    private Integer gitem_id;
+    private Long gitem_id;
 
-    private Integer user_id;
-    private Integer product_id;
-    private Integer glist_id;
-    private Integer cart_id;
+    private Long user_id;
+    private Long product_id;
+    private Long glist_id;
+    private Long cart_id;
 
     private Integer quantity;
     private Integer weight;
@@ -39,7 +40,7 @@ public class GItem implements Serializable {
 
         try {
             if(fromJson.has("gitem_id")){
-                this.setGitemId(fromJson.getInt("gitem_id"));
+                this.setGitemId(fromJson.getLong("gitem_id"));
             }
             if(fromJson.has("quantity")){
                 this.setQuantity(fromJson.getInt("quantity"));
@@ -66,6 +67,12 @@ public class GItem implements Serializable {
         }
     }
 
+    @Override
+    public GItem createInstance(JSONObject fromJson) {
+        return new GItem(fromJson);
+    }
+
+    @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
         try {
@@ -115,10 +122,10 @@ public class GItem implements Serializable {
         return json;
     }
 
-    public Integer getGitemId() {
+    public Long getGitemId() {
         return gitem_id;
     }
-    public GItem setGitemId(Integer gitem_id) {
+    public GItem setGitemId(Long gitem_id) {
         this.gitem_id = gitem_id;
         return this;
     }
@@ -169,31 +176,31 @@ public class GItem implements Serializable {
         return this;
     }
 
-    public Integer getUserId() {
+    public Long getUserId() {
         return user_id;
     }
-    public void setUserId(Integer user_id) {
+    public void setUserId(Long user_id) {
         this.user_id = user_id;
     }
 
-    public Integer getProductId() {
+    public Long getProductId() {
         return product_id;
     }
-    public void setProductId(Integer product_id) {
+    public void setProductId(Long product_id) {
         this.product_id = product_id;
     }
 
-    public Integer getGlistId() {
+    public Long getGlistId() {
         return glist_id;
     }
-    public void setGlistId(Integer glist_id) {
+    public void setGlistId(Long glist_id) {
         this.glist_id = glist_id;
     }
 
-    public Integer getCartId() {
+    public Long getCartId() {
         return cart_id;
     }
-    public void setCartId(Integer cart_id) {
+    public void setCartId(Long cart_id) {
         this.cart_id = cart_id;
     }
 }

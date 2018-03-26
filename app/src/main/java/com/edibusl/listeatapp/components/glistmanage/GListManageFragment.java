@@ -1,5 +1,7 @@
 package com.edibusl.listeatapp.components.glistmanage;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -17,9 +19,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.edibusl.listeatapp.R;
 import com.edibusl.listeatapp.components.gitem.GItemActivity;
+import com.edibusl.listeatapp.components.glistedit.GListEditActivity;
 import com.edibusl.listeatapp.model.datatypes.GList;
 import com.google.common.base.Strings;
 import com.squareup.picasso.Picasso;
@@ -29,9 +33,6 @@ import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-/**
- * Display a grid of {@link GList}s. User can choose to view all, active or completed tasks.
- */
 public class GListManageFragment extends Fragment implements GListManageContract.View {
     private final int MENU_CONTEXT_DELETE_ID = 1;
 
@@ -59,7 +60,7 @@ public class GListManageFragment extends Fragment implements GListManageContract
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(), GItemActivity.class);
+                Intent intent = new Intent(getContext(), GListEditActivity.class);
                 startActivity(intent);
             }
         });
@@ -102,10 +103,8 @@ public class GListManageFragment extends Fragment implements GListManageContract
     }
 
     public void showGListEditInNewActivity(GList gList) {
-        //Start the GItem activity and pass this object to there
-        Intent intent = new Intent(getContext(), GItemActivity.class);
-        intent.putExtra("GList", gList);
-        startActivity(intent);
+        //Just close this activity (the current glist_id was already replaced)
+        getActivity().finish();
     }
 
     @Override
@@ -122,6 +121,12 @@ public class GListManageFragment extends Fragment implements GListManageContract
                 srl.setRefreshing(active);
             }
         });
+    }
+
+    @Override
+    public void glistDeleted() {
+        Toast.makeText(this.getContext(), R.string.glist_manage_item_deleted, Toast.LENGTH_SHORT).show();
+        mPresenter.loadData();
     }
 
     private static class GListsAdapter extends BaseAdapter {
@@ -215,13 +220,35 @@ public class GListManageFragment extends Fragment implements GListManageContract
 
         @Override
         public void onItemEdit(GList item) {
-            //TODO
+            //Start the GListEdit activity and pass this object to the activity
+            Intent intent = new Intent(getContext(), GListEditActivity.class);
+            intent.putExtra("GList", item);
+            startActivity(intent);
         }
 
         @Override
-        public void onItemDelete(GList item) {
-            //TODO
+        public void onItemDelete(final GList item) {
+            //Ask the user if her's sure about it
+            DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    switch (which){
+                        case DialogInterface.BUTTON_POSITIVE:
+                            //Yes button clicked
+                            mPresenter.deleteGListClicked(item);
+                            break;
 
+                        case DialogInterface.BUTTON_NEGATIVE:
+                            //No button clicked - don't do anything
+                            break;
+                    }
+                }
+            };
+
+            //Show the Yes/No dialog
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setMessage(R.string.glist_manage_item_delete_sure).setPositiveButton(getString(R.string.glist_manage_item_delete_sure_yes), dialogClickListener)
+                    .setNegativeButton(getString(R.string.glist_manage_item_delete_sure_no), dialogClickListener).show();
         }
     };
 

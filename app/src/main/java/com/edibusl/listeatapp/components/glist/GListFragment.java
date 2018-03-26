@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.edibusl.listeatapp.components.gitem.GItemActivity;
+import com.edibusl.listeatapp.components.glistmanage.GListManageActivity;
 import com.edibusl.listeatapp.model.datatypes.Category;
 import com.edibusl.listeatapp.model.datatypes.GItem;
 import com.edibusl.listeatapp.model.datatypes.GList;
@@ -33,9 +34,6 @@ import com.squareup.picasso.Picasso;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-/**
- * Display a grid of {@link GItem}s. User can choose to view all, active or completed tasks.
- */
 public class GListFragment extends Fragment implements GListContract.View {
     private final int MENU_CONTEXT_DELETE_ID = 1;
 
@@ -107,13 +105,15 @@ public class GListFragment extends Fragment implements GListContract.View {
     }
 
     @Override
-    public void showGListInfo(GList gList) {
-        //TODO
+    public void openGListsManage() {
+        //Start the GListManager activity to choose a glist
+        Intent intent = new Intent(getContext(), GListManageActivity.class);
+        startActivity(intent);
     }
 
     @Override
     public void showGItemInNewActivity(GItem gItem) {
-        //Start the GItem activity and pass this object to there
+        //Start the GItem activity and pass this object to the activity
         Intent intent = new Intent(getContext(), GItemActivity.class);
         intent.putExtra("GItem", gItem);
         startActivity(intent);
@@ -158,9 +158,9 @@ public class GListFragment extends Fragment implements GListContract.View {
                 return;
             }
 
-            Set<Integer> categoryIds = new HashSet<>();
+            Set<Long> categoryIds = new HashSet<>();
             for (GItem gItem : gItems){
-                int categoryId = gItem.getProduct().getCategory().getCategory_id();
+                Long categoryId = gItem.getProduct().getCategory().getCategory_id();
                 if(!categoryIds.contains(categoryId)){
                     categoryIds.add(categoryId);
                     mItems.add(gItem.getProduct().getCategory());

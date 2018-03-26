@@ -2,33 +2,40 @@ package com.edibusl.listeatapp.model.repository;
 
 
 import android.support.annotation.NonNull;
-
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.edibusl.listeatapp.helpers.ConfigsManager;
 import com.edibusl.listeatapp.helpers.VolleyQueue;
 import com.edibusl.listeatapp.model.datatypes.GItem;
 import com.edibusl.listeatapp.model.datatypes.GList;
+import com.edibusl.listeatapp.mvp.BaseRepository;
 
 import org.json.JSONObject;
 
-import java.util.HashMap;
-import java.util.Map;
-
-public class GListRepo {
+public class GListRepo extends BaseRepository {
     //TODO - Move to configs
     private final String BASE_URL = "http://10.100.102.7:9090";
+    private final String CURRENT_GLIST_ID_KEY = "current_glist_id";
 
-    private int mCurrentGListId = 0;
+    private Long mCurrentGListId;
 
     public GListRepo() {
-        //TODO - Load from mCurrentGListId from saved config
-        mCurrentGListId = 21;
+        long savedCurrentGListId = ConfigsManager.getInstance().getLong(CURRENT_GLIST_ID_KEY);
+        mCurrentGListId = savedCurrentGListId;
+        mBaseUrl = BASE_URL;
     }
 
-    public void getGListFullInfo(int glistId, @NonNull final AppData.LoadDataCallback callback) {
+    public Long getCurrentGListId() {
+        return mCurrentGListId;
+    }
+    public void setCurrentGListId(Long gListId){
+        mCurrentGListId = gListId;
+        ConfigsManager.getInstance().setLong(CURRENT_GLIST_ID_KEY, gListId);
+    }
+
+    public void getGListFullInfo(Long glistId, @NonNull final AppData.LoadDataCallback callback) {
         //Instantiate the RequestQueue.
         String url = String.format("%s/glist/fullInfo/%s", BASE_URL, String.valueOf(glistId));
 
@@ -51,7 +58,7 @@ public class GListRepo {
         VolleyQueue.getInstance().addToRequestQueue(request);
     }
 
-    public void getAllUserGLists(int userId, @NonNull final AppData.LoadDataCallback callback) {
+    public void getAllUserGLists(Long userId, @NonNull final AppData.LoadDataCallback callback) {
         //Instantiate the RequestQueue.
         String url = String.format("%s/glist/all/%s", BASE_URL, String.valueOf(userId));
 
@@ -75,67 +82,18 @@ public class GListRepo {
     }
 
     public void updateGItem(GItem gItem, @NonNull final AppData.LoadDataCallback callback) {
-        //Instantiate the RequestQueue.
-        String url = String.format("%s/gitem", BASE_URL);
-
-        //Decide about the request method according to edit mode / new mode
-        Integer gItemId = gItem.getGitemId();
-        int method = (gItemId == null || gItemId == 0 ? Request.Method.POST : Request.Method.PUT);
-
-        JsonObjectRequest request = new JsonObjectRequest(method, url, gItem.toJson(),
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        callback.onSuccess(null);
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        callback.onError(error.getMessage());
-                    }
-                }
-        );
-        request.setRetryPolicy(VolleyQueue.getInstance().getRetryPolicy());
-
-        // Add the request to the RequestQueue.
-        VolleyQueue.getInstance().addToRequestQueue(request);
+        updateEntity("gitem", gItem, gItem.getGitemId(), gItem.getGlistId(), callback);
     }
 
-    public void deleteGItem(long gItemId, @NonNull final AppData.LoadDataCallback callback) {
-        //Instantiate the RequestQueue.
-        String url = String.format("%s/gitem/%s", BASE_URL, gItemId);
-
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.DELETE, url, null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        callback.onSuccess(null);
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        callback.onError(error.getMessage());
-                    }
-                }
-        ){
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                //Set content-type header since a DELETE method without it will fail
-                return VolleyQueue.getInstance().getDefaultHeaders();
-            }
-        };
-        request.setRetryPolicy(VolleyQueue.getInstance().getRetryPolicy());
-
-        // Add the request to the RequestQueue.
-        VolleyQueue.getInstance().addToRequestQueue(request);
+    public void deleteGItem(Long gItemId, @NonNull final AppData.LoadDataCallback callback) {
+        deleteEntity("gitem", gItemId, null, callback);
     }
 
-    public int getCurrentGListId() {
-        return mCurrentGListId;
+    public void updateGList(GList gList, @NonNull final AppData.LoadDataCallback callback) {
+        updateEntity("glist", gList, gList.getGlist_id(), AppData.getInstance().UserRepo().getCurrentUserId(), callback);
     }
-    public void setCurrentGListId(int gListId){
-        mCurrentGListId = gListId;
+
+    public void deleteGList(Long gListId, @NonNull final AppData.LoadDataCallback callback) {
+        deleteEntity("glist", gListId, AppData.getInstance().UserRepo().getCurrentUserId(), callback);
     }
 }

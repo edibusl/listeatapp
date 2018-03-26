@@ -1,8 +1,8 @@
-package com.edibusl.listeatapp.components.gitem;
+package com.edibusl.listeatapp.components.glistedit;
 
 import android.support.annotation.NonNull;
 
-import com.edibusl.listeatapp.model.datatypes.GItem;
+import com.edibusl.listeatapp.model.datatypes.GList;
 import com.edibusl.listeatapp.model.datatypes.Product;
 import com.edibusl.listeatapp.mvp.BasePresenter;
 import com.edibusl.listeatapp.mvp.BaseView;
@@ -12,22 +12,18 @@ import java.util.List;
 /**
  * This specifies the contract between the view and the presenter.
  */
-public interface GItemContract {
+public interface GListEditContract {
 
     interface View extends BaseView<Presenter> {
         void setEditMode();
-        void showGItem(GItem gItem);
-        void setProduct(Product product);
-        void itemCreated();
-        void itemUpdated();
-        void itemDeleted();
+        void showGList(GList gList);
+        void glistCreated();
+        void glistUpdated();
     }
 
     interface Presenter extends BasePresenter {
-        void createGItem(@NonNull GItem gItem);
-        void updateGItem(@NonNull GItem gItem);
-        void deleteGItem(Long gItemId);
-        void setProduct(Product product);
+        void createGList(@NonNull GList gList);
+        void updateGList(@NonNull GList gList);
         List<Product> searchProduct(String text);
     }
 }

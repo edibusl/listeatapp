@@ -58,5 +58,22 @@ public class GListManagePresenter implements GListManageContract.Presenter {
     @Override
     public void glistClicked(@NonNull GList gList) {
         mGListManageView.showGListEditInNewActivity(gList);
+        mAppData.GListRepo().setCurrentGListId(gList.getGlist_id());
+    }
+
+    @Override
+    public void deleteGListClicked(@NonNull GList item) {
+        mAppData.GListRepo().deleteGList(item.getGlist_id(), new AppData.LoadDataCallback() {
+            @Override
+            public void onSuccess(Object data) {
+                mAppData.GListRepo().setCurrentGListId(null);
+                mGListManageView.glistDeleted();
+            }
+
+            @Override
+            public void onError(String error) {
+                Log.e(LOG_TAG, error);
+            }
+        });
     }
 }

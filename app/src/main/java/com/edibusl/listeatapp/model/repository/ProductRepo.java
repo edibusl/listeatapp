@@ -34,7 +34,7 @@ public class ProductRepo {
      * @return A list of products matching the text
      * @throws Exception
      */
-    public List<Product> getProductsByAutoComplete(long gListId, String text) throws Exception{
+    public List<Product> getProductsByAutoComplete(Long gListId, String text) throws Exception{
         //Instantiate the RequestQueue.
         String url = String.format("%s/product/autocomplete/%s/%s", BASE_URL, gListId, text);
 

@@ -1,5 +1,7 @@
 package com.edibusl.listeatapp.components.glist;
 
+import android.content.Intent;
+import android.support.v7.app.ActionBar;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -16,22 +18,29 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class GListPresenter implements GListContract.Presenter {
     public static final String LOG_TAG = "GListPresenter";
 
-    private final AppData mAppData;
-    private final GListContract.View mGListView;
-    private int mCurGListId;
+    private AppData mAppData;
+    private GListContract.View mGListView;
+    private Long mCurGListId;
+    private ActionBar mActionBar;
 
-    public GListPresenter(@NonNull AppData appData, @NonNull GListContract.View glistView) {
+    public GListPresenter(@NonNull AppData appData, @NonNull GListContract.View glistView, ActionBar actionBar) {
         mAppData = checkNotNull(appData, "appData cannot be null");
         mGListView = checkNotNull(glistView, "glistView cannot be null!");
-
         mGListView.setPresenter(this);
 
+        mActionBar = actionBar;
         mCurGListId = mAppData.GListRepo().getCurrentGListId();
     }
 
     @Override
     public void start() {
-        loadData();
+        mCurGListId = mAppData.GListRepo().getCurrentGListId();
+        if(mCurGListId == null || mCurGListId == 0) {
+            //No current glist is set. Redirect to glist manage activity
+            mGListView.openGListsManage();
+        } else {
+            loadData();
+        }
     }
 
     @Override
@@ -42,10 +51,9 @@ public class GListPresenter implements GListContract.Presenter {
             @Override
             public void onSuccess(Object data) {
                 GList gList = (GList)data;
+
+                mActionBar.setTitle(gList.getSubject());
                 mGListView.showGItems(gList.getGitems());
-
-                //TODO - Show list info
-
                 mGListView.setLoadingIndicator(false);
             }
 

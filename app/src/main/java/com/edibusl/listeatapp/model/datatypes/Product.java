@@ -15,9 +15,9 @@ import java.util.List;
 public class Product extends BaseModel<Product> implements Serializable {
     public static final String LOG_TAG = "Product";
 
-    private Integer product_id;
-    private Integer category_id;
-    private Integer glist_id;
+    private Long product_id;
+    private Long category_id;
+    private Long glist_id;
 
     private String name;
     private String description;
@@ -43,7 +43,7 @@ public class Product extends BaseModel<Product> implements Serializable {
 
         try {
             if(fromJson.has("product_id")){
-                this.setProduct_id(fromJson.getInt("product_id"));
+                this.setProduct_id(fromJson.getLong("product_id"));
             }
 
             if(fromJson.has("name")){
@@ -100,10 +100,10 @@ public class Product extends BaseModel<Product> implements Serializable {
         return json;
     }
 
-    public int getProduct_id() {
+    public Long getProduct_id() {
         return product_id;
     }
-    public Product setProduct_id(int product_id) {
+    public Product setProduct_id(Long product_id) {
         this.product_id = product_id;
         return this;
     }
@@ -140,18 +140,18 @@ public class Product extends BaseModel<Product> implements Serializable {
         return this;
     }
 
-    public Integer getGlistId() {
+    public Long getGlistId() {
         return glist_id;
     }
-    public Product setGlistId(Integer glist_id) {
+    public Product setGlistId(Long glist_id) {
         this.glist_id = glist_id;
         return this;
     }
 
-    public Integer getCategoryId() {
+    public Long getCategoryId() {
         return category_id;
     }
-    public Product setCategoryId(Integer category_id) {
+    public Product setCategoryId(Long category_id) {
         this.category_id = category_id;
         return this;
     }

@@ -14,7 +14,7 @@ import java.util.List;
 public class GList extends BaseModel<GList> implements Serializable {
     public static final String LOG_TAG = "GList";
 
-    private long glist_id;
+    private Long glist_id;
     private String subject;
     private String description;
     private List<User> users = new ArrayList<User>();
@@ -27,6 +27,26 @@ public class GList extends BaseModel<GList> implements Serializable {
     @Override
     public GList createInstance(JSONObject fromJson) {
         return new GList(fromJson);
+    }
+
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        try {
+            json.put("glist_id", glist_id);
+
+            if (subject != null) {
+                json.put("subject", subject);
+            }
+
+            if (description != null) {
+                json.put("description", description);
+            }
+        } catch(Exception ex){
+            Log.e(LOG_TAG, "Error converting GList to JSONObject: " + ex.getMessage());
+        }
+
+        return json;
     }
 
     public GList() {}
@@ -89,11 +109,11 @@ public class GList extends BaseModel<GList> implements Serializable {
         }
     }
 
-    public long getGlist_id() {
+    public Long getGlist_id() {
         return glist_id;
     }
 
-    public void setGlist_id(long glist_id) {
+    public void setGlist_id(Long glist_id) {
         this.glist_id = glist_id;
     }
 

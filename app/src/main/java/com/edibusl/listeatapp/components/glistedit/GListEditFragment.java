@@ -18,7 +18,6 @@ import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.Filterable;
 
-import com.edibusl.listeatapp.components.product.ProductActivity;
 import com.google.common.base.Strings;
 import com.shawnlin.numberpicker.NumberPicker;
 import android.widget.RadioButton;
@@ -27,7 +26,7 @@ import android.widget.Toast;
 
 import com.edibusl.listeatapp.R;
 import com.edibusl.listeatapp.model.datatypes.GList;
-import com.edibusl.listeatapp.model.datatypes.Product;
+import com.edibusl.listeatapp.model.datatypes.User;
 
 import java.util.ArrayList;
 
@@ -38,7 +37,7 @@ public class GListEditFragment extends Fragment implements GListEditContract.Vie
 
     private GListEditContract.Presenter mPresenter;
     private AutoCompleteAdapter mAutoCompleteAdapter;
-    private Product mSelectedProduct;
+    private User mSelectedUser;
     private GList mEditedGList;
 
     @Override
@@ -60,7 +59,7 @@ public class GListEditFragment extends Fragment implements GListEditContract.Vie
         autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long index) {
-                mSelectedProduct = mAutoCompleteAdapter.getProduct((int)index);
+                mSelectedUser = mAutoCompleteAdapter.getUser((int)index);
             }
         });
 
@@ -97,16 +96,8 @@ public class GListEditFragment extends Fragment implements GListEditContract.Vie
         String description = ((EditText)(getView().findViewById(R.id.editDescription))).getText().toString();
         gList.setDescription(description);
 
-        if(mEditedGList != null) {
-            mPresenter.updateGList(gList);
-        } else {
-            mPresenter.createGList(gList);
-        }
-    }
-
-    private void onAddProductButtonClicked(){
-        Intent intent = new Intent(getContext(), ProductActivity.class);
-        getActivity().startActivityForResult(intent, 1);
+        //Save / Add
+        mPresenter.updateGList(gList, mSelectedUser);
     }
 
     @Override
@@ -156,13 +147,13 @@ public class GListEditFragment extends Fragment implements GListEditContract.Vie
 
 class AutoCompleteAdapter extends ArrayAdapter<String> implements Filterable {
     ArrayList<String> mlstItems;
-    ArrayList<Product> mlstProducts;
+    ArrayList<User> mlstUsers;
     GListEditContract.Presenter mPresenter;
 
     public AutoCompleteAdapter(Context context, int textViewResourceId, GListEditContract.Presenter presenter) {
         super(context, textViewResourceId);
         mlstItems = new ArrayList<>();
-        mlstProducts = new ArrayList<>();
+        mlstUsers = new ArrayList<>();
         mPresenter = presenter;
     }
 
@@ -176,25 +167,21 @@ class AutoCompleteAdapter extends ArrayAdapter<String> implements Filterable {
         return mlstItems.get(index);
     }
 
-    public Product getProduct(int index) {
-        if (mlstProducts == null || index > mlstProducts.size() - 1) {
+    public User getUser(int index) {
+        if (mlstUsers == null || index > mlstUsers.size() - 1) {
             return null;
         }
 
-        return mlstProducts.get(index);
+        return mlstUsers.get(index);
     }
 
-    public void setSelectedProduct(Product product) {
-        mlstProducts.clear();
-        mlstProducts.add(product);
+    public void setSelectedUser(User user) {
+        mlstUsers.clear();
+        mlstUsers.add(user);
         mlstItems.clear();
-        mlstItems.add(productToString(product));
+        mlstItems.add(user.getUserName());
 
         notifyDataSetChanged();
-    }
-
-    private String productToString(Product product) {
-        return String.format("%s (%s)", product.getName(), product.getCategory().getName());
     }
 
     @Override
@@ -205,21 +192,21 @@ class AutoCompleteAdapter extends ArrayAdapter<String> implements Filterable {
                 FilterResults filterResults = new FilterResults();
                 if (constraint != null) {
                     mlstItems.clear();
-                    mlstProducts = null;
+                    mlstUsers = null;
 
                     try {
                         //Prepare multiple params to be passed to async task
-                        GetProductsForAutoCompleteData params = new GetProductsForAutoCompleteData();
+                        GetUsersForAutoCompleteData params = new GetUsersForAutoCompleteData();
                         params.text = constraint.toString();
                         params.presenter = mPresenter;
 
                         //Execute an AsyncTask to make the request to server.
                         //The execution is blocking and frees up the UI thread for other operations
-                        mlstProducts = new GetProductsForAutoComplete().execute(new GetProductsForAutoCompleteData[]{params}).get();
+                        mlstUsers = new GetUsersForAutoComplete().execute(new GetUsersForAutoCompleteData[]{params}).get();
 
-                        //Convert each product item to a string
-                        for(Product product : mlstProducts){
-                            mlstItems.add(productToString(product));
+                        //Convert each user item to a string
+                        for(User user : mlstUsers){
+                            mlstItems.add(user.getUserName());
                         }
                     } catch (Exception e) {
                         Log.e("Error when searching", e.getMessage());
@@ -245,27 +232,27 @@ class AutoCompleteAdapter extends ArrayAdapter<String> implements Filterable {
         return myFilter;
     }
 
-    private class GetProductsForAutoComplete extends AsyncTask<GetProductsForAutoCompleteData, Void, ArrayList<Product>> {
+    private class GetUsersForAutoComplete extends AsyncTask<GetUsersForAutoCompleteData, Void, ArrayList<User>> {
         @Override
-        protected ArrayList<Product> doInBackground(GetProductsForAutoCompleteData... params) {
-            ArrayList<Product> filteredProducts;
+        protected ArrayList<User> doInBackground(GetUsersForAutoCompleteData... params) {
+            ArrayList<User> filteredUsers;
 
             try {
                 //A blocking call to get the search results
-                filteredProducts = (ArrayList<Product>)params[0].presenter.searchProduct(params[0].text);
+                filteredUsers = (ArrayList<User>)params[0].presenter.searchUser(params[0].text);
             }
             catch (Exception ex) {
-                filteredProducts = new ArrayList<>();
+                filteredUsers = new ArrayList<>();
             }
 
-            return filteredProducts;
+            return filteredUsers;
         }
 
         @Override
-        protected void onPostExecute(ArrayList<Product> result) {}
+        protected void onPostExecute(ArrayList<User> result) {}
     }
 
-    private class GetProductsForAutoCompleteData{
+    private class GetUsersForAutoCompleteData{
         public String text;
         public GListEditContract.Presenter presenter;
     }

@@ -7,11 +7,13 @@ import com.edibusl.listeatapp.components.glistedit.GListEditContract;
 import com.edibusl.listeatapp.components.glistedit.GListEditFragment;
 import com.edibusl.listeatapp.model.datatypes.GList;
 import com.edibusl.listeatapp.model.datatypes.GList;
-import com.edibusl.listeatapp.model.datatypes.Product;
+import com.edibusl.listeatapp.model.datatypes.User;
 import com.edibusl.listeatapp.model.repository.AppData;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.microedition.khronos.opengles.GL;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -43,52 +45,81 @@ public class GListEditPresenter implements GListEditContract.Presenter {
     }
 
     @Override
-    public void createGList(@NonNull GList gList) {
+    public void updateGList(@NonNull final GList gList, final User user) {
         checkNotNull(gList, "gList cannot be null!");
+
+        //Check if we create or update
+        boolean isNewTmp = false;
+        if(gList.getGlist_id() == null || gList.getGlist_id() == 0) {
+            isNewTmp = true;
+        }
+        final boolean isNewGList = isNewTmp;
 
         //Send the request to server
         mAppData.GListRepo().updateGList(gList, new AppData.LoadDataCallback() {
             @Override
             public void onSuccess(Object data) {
-                mGListEditView.glistCreated();
+                if(user == null) {
+                    showSuccessMessage(isNewGList);
+                } else {
+                    //If we create a new glist, then take the glist_id from the response
+                    //If we update an existing glist, take the glist_id from the original glist object
+                    Long gListId = gList.getGlist_id();
+                    if(gListId == null) {
+                        GList newGlist = (GList)data;
+                        gListId = newGlist.getGlist_id();
+                    }
+
+                    //We're not finished yet. Now need to add the user to the glist
+                    addUserToGList(gListId, user.getUser_id(), isNewGList);
+                }
             }
 
             @Override
             public void onError(String error) {
-                Log.e(LOG_TAG, "Error when saving glist");
+                if(isNewGList) {
+                    Log.e(LOG_TAG, "Error when creating glist");
+                } else {
+                    Log.e(LOG_TAG, "Error when updating glist");
+                }
             }
         });
     }
 
-    @Override
-    public void updateGList(@NonNull GList gList) {
-        checkNotNull(gList, "gList cannot be null!");
-
+    private void addUserToGList(@NonNull Long glistId, @NonNull Long userId, final boolean isNewGList) {
         //Send the request to server
-        mAppData.GListRepo().updateGList(gList, new AppData.LoadDataCallback() {
+        mAppData.GListRepo().addUserToGList(userId, glistId, new AppData.LoadDataCallback() {
             @Override
             public void onSuccess(Object data) {
-                mGListEditView.glistUpdated();
+                showSuccessMessage(isNewGList);
             }
 
             @Override
             public void onError(String error) {
-                Log.e(LOG_TAG, "Error when updating glist");
+                Log.e(LOG_TAG, "Error when adding user to glist");
             }
         });
     }
 
+    private void showSuccessMessage(boolean isNew) {
+        if (isNew) {
+            mGListEditView.glistCreated();
+        } else {
+            mGListEditView.glistUpdated();
+        }
+    }
+
     @Override
-    public List<Product> searchProduct(String text) {
-        List<Product> products;
+    public List<User> searchUser(String text) {
+        List<User> users;
         try {
-            products = mAppData.ProductRepo().getProductsByAutoComplete(mAppData.GListRepo().getCurrentGListId(), text);
+            users = mAppData.UserRepo().getUsersByAutoComplete(text);
         }
         catch(Exception ex){
-            Log.e(LOG_TAG, "Error when searching for a product by auto complete: " + ex.getMessage());
-            return new ArrayList<Product>();
+            Log.e(LOG_TAG, "Error when searching for a user by auto complete: " + ex.getMessage());
+            return new ArrayList<User>();
         }
 
-        return products;
+        return users;
     }
 }

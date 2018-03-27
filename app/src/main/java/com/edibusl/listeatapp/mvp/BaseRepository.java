@@ -52,7 +52,7 @@ public abstract class BaseRepository {
         VolleyQueue.getInstance().addToRequestQueue(request);
     }
 
-    public void updateEntity(String entityRestPath, BaseModel entity, Long id, Long parentId, @NonNull final AppData.LoadDataCallback callback) {
+    public void updateEntity(String entityRestPath, final BaseModel entity, Long id, Long parentId, @NonNull final AppData.LoadDataCallback callback) {
         String url = String.format("%s/%s", mBaseUrl, entityRestPath);
 
         //Decide about the request method according to edit mode / new mode
@@ -66,7 +66,7 @@ public abstract class BaseRepository {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        callback.onSuccess(null);
+                        callback.onSuccess(entity.createInstance(response));
                     }
                 },
                 new Response.ErrorListener() {

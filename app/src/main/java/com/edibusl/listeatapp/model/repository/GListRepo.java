@@ -2,19 +2,28 @@ package com.edibusl.listeatapp.model.repository;
 
 
 import android.support.annotation.NonNull;
+import android.util.Log;
+
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.RequestFuture;
 import com.edibusl.listeatapp.helpers.ConfigsManager;
 import com.edibusl.listeatapp.helpers.VolleyQueue;
 import com.edibusl.listeatapp.model.datatypes.GItem;
 import com.edibusl.listeatapp.model.datatypes.GList;
+import com.edibusl.listeatapp.model.datatypes.Product;
+import com.edibusl.listeatapp.model.datatypes.User;
 import com.edibusl.listeatapp.mvp.BaseRepository;
 
 import org.json.JSONObject;
 
+import java.util.List;
+
 public class GListRepo extends BaseRepository {
+    public static final String LOG_TAG = "GListRepo";
+
     //TODO - Move to configs
     private final String BASE_URL = "http://10.100.102.7:9090";
     private final String CURRENT_GLIST_ID_KEY = "current_glist_id";
@@ -95,5 +104,37 @@ public class GListRepo extends BaseRepository {
 
     public void deleteGList(Long gListId, @NonNull final AppData.LoadDataCallback callback) {
         deleteEntity("glist", gListId, AppData.getInstance().UserRepo().getCurrentUserId(), callback);
+    }
+
+    public void addUserToGList(Long userId, Long glistId, @NonNull final AppData.LoadDataCallback callback) {
+        //Instantiate the RequestQueue.
+        String url = String.format("%s/glist/addUserToGList", BASE_URL);
+
+        //Request data
+        JSONObject requestData = new JSONObject();
+        try {
+            requestData.put("user_id", userId);
+            requestData.put("glist_id", glistId);
+        } catch(Exception ex) {
+            Log.e(LOG_TAG, ex.getMessage());
+        }
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.PUT, url, requestData,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        callback.onSuccess(null);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        callback.onError(error.getMessage());
+                    }
+                }
+        );
+
+        // Add the request to the RequestQueue.
+        VolleyQueue.getInstance().addToRequestQueue(request);
     }
 }

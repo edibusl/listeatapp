@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.edibusl.listeatapp.components.glistedit.GListEditContract;
 import com.edibusl.listeatapp.components.glistedit.GListEditFragment;
+import com.edibusl.listeatapp.helpers.GeneralUtils;
 import com.edibusl.listeatapp.model.datatypes.GList;
 import com.edibusl.listeatapp.model.datatypes.GList;
 import com.edibusl.listeatapp.model.datatypes.User;
@@ -116,7 +117,8 @@ public class GListEditPresenter implements GListEditContract.Presenter {
             users = mAppData.UserRepo().getUsersByAutoComplete(text);
         }
         catch(Exception ex){
-            Log.e(LOG_TAG, "Error when searching for a user by auto complete: " + ex.getMessage());
+            Log.e(LOG_TAG, "Error when searching for a user by auto complete");
+            GeneralUtils.printErrorToLog(LOG_TAG, ex);
             return new ArrayList<User>();
         }
 

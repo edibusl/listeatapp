@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -15,6 +16,16 @@ import java.util.Date;
 import java.util.Locale;
 
 public class GeneralUtils {
+    public static void printErrorToLog(String logTag, Exception ex) {
+        String message = ex.getMessage() != null ? ex.getMessage() : ex.toString();
+        Log.e(logTag, message);
+    }
+
+    public static void printErrorToLog(String logTag, String error) {
+        String message = error != null ? error : "";
+        Log.e(logTag, message);
+    }
+
     public static void saveBitmapToFile(Bitmap bmpImage, String filename) {
         FileOutputStream out = null;
         try {

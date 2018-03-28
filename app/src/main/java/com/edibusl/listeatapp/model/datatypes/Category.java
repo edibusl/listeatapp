@@ -2,6 +2,8 @@ package com.edibusl.listeatapp.model.datatypes;
 
 import android.util.Log;
 
+import com.edibusl.listeatapp.helpers.GeneralUtils;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -40,7 +42,7 @@ public class Category implements Serializable {
             }
         }
         catch(Exception ex){
-            Log.e(LOG_TAG, ex.toString());
+            GeneralUtils.printErrorToLog(LOG_TAG, ex);
         }
 
         return lstCategories;
@@ -65,7 +67,7 @@ public class Category implements Serializable {
             }
         }
         catch(Exception ex){
-            Log.e(LOG_TAG, ex.toString());
+            GeneralUtils.printErrorToLog(LOG_TAG, ex);
         }
     }
 

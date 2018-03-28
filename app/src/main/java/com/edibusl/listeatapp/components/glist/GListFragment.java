@@ -1,5 +1,7 @@
 package com.edibusl.listeatapp.components.glist;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,11 +13,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.edibusl.listeatapp.R;
 
@@ -66,7 +70,7 @@ public class GListFragment extends Fragment implements GListContract.View {
             }
         });
 
-        // Setup progress indicator
+        //Setup progress indicator
         final SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) root.findViewById(R.id.refresh_layout);
         swipeRefreshLayout.setColorSchemeColors(
                 ContextCompat.getColor(getActivity(), R.color.colorPrimary),
@@ -82,7 +86,36 @@ public class GListFragment extends Fragment implements GListContract.View {
             }
         });
 
-        //TODO - What's that?
+        //Set listener for purchase button
+        ((Button)(root.findViewById(R.id.btnPurchase))).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Ask the user if her's sure about it
+                DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which){
+                            case DialogInterface.BUTTON_POSITIVE:
+                                //Yes button clicked
+                                mPresenter.onPurchaseClicked();
+                                break;
+
+                            case DialogInterface.BUTTON_NEGATIVE:
+                                //No button clicked - don't do anything
+                                break;
+                        }
+                    }
+                };
+
+                //Show the Yes/No dialog
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setMessage(R.string.glist_purchase_sure).setPositiveButton(getString(R.string.glist_purchase_sure_yes), dialogClickListener)
+                        .setNegativeButton(getString(R.string.glist_purchase_sure_no), dialogClickListener).show();
+            }
+        });
+
+
+
         setHasOptionsMenu(true);
 
         return root;
@@ -101,6 +134,7 @@ public class GListFragment extends Fragment implements GListContract.View {
 
     @Override
     public void showGItems(List<GItem> gItems) {
+        ((TextView)getView().findViewById(R.id.tvTotalItems)).setText(Integer.toString(gItems.size()));
         mListAdapter.replaceData(gItems);
     }
 
@@ -133,6 +167,11 @@ public class GListFragment extends Fragment implements GListContract.View {
                 srl.setRefreshing(active);
             }
         });
+    }
+
+    @Override
+    public void showPurchaseMade() {
+        Toast.makeText(this.getContext(), R.string.glist_purchase_made_message, Toast.LENGTH_SHORT).show();
     }
 
     private static class GItemsAdapter extends BaseAdapter {
@@ -243,13 +282,7 @@ public class GListFragment extends Fragment implements GListContract.View {
                 //Complete checkbox
                 CheckBox completeCB = (CheckBox) rowView.findViewById(R.id.cbComplete);
                 completeCB.setChecked(gItem.getIsChecked());
-                if (gItem.getIsChecked()) {
-                    rowView.setBackgroundDrawable(viewGroup.getContext()
-                            .getResources().getDrawable(R.drawable.glist_checked_touch_feedback));
-                } else {
-                    rowView.setBackgroundDrawable(viewGroup.getContext()
-                            .getResources().getDrawable(R.drawable.glist_touch_feedback));
-                }
+
                 final GItem gItemFinal = gItem;
                 completeCB.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -288,14 +321,12 @@ public class GListFragment extends Fragment implements GListContract.View {
 
         @Override
         public void onItemCheck(GItem gItem) {
-            //TODO
-            //mPresenter.completeTask(completedTask);
+            mPresenter.checkGItem(gItem, true);
         }
 
         @Override
         public void onItemUncheck(GItem gItem) {
-            //TODO
-            //mPresenter.activateTask(activatedTask);
+            mPresenter.checkGItem(gItem, false);
         }
     };
 

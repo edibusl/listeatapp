@@ -10,6 +10,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.RequestFuture;
 import com.edibusl.listeatapp.helpers.ConfigsManager;
+import com.edibusl.listeatapp.helpers.GeneralUtils;
 import com.edibusl.listeatapp.helpers.VolleyQueue;
 import com.edibusl.listeatapp.model.datatypes.GItem;
 import com.edibusl.listeatapp.model.datatypes.GList;
@@ -116,10 +117,33 @@ public class GListRepo extends BaseRepository {
             requestData.put("user_id", userId);
             requestData.put("glist_id", glistId);
         } catch(Exception ex) {
-            Log.e(LOG_TAG, ex.getMessage());
+            GeneralUtils.printErrorToLog(LOG_TAG, ex);
         }
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.PUT, url, requestData,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        callback.onSuccess(null);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        callback.onError(error.getMessage());
+                    }
+                }
+        );
+
+        // Add the request to the RequestQueue.
+        VolleyQueue.getInstance().addToRequestQueue(request);
+    }
+
+    public void purchase(Long glistId, @NonNull final AppData.LoadDataCallback callback) {
+        //Instantiate the RequestQueue.
+        String url = String.format("%s/glist/purchase/%s", BASE_URL, glistId);
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {

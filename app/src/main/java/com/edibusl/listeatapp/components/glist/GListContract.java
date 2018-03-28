@@ -23,6 +23,8 @@ public interface GListContract {
         void setLoadingIndicator(final boolean active);
 
         void openGListsManage();
+
+        void showPurchaseMade();
     }
 
     interface Presenter extends BasePresenter {
@@ -33,10 +35,8 @@ public interface GListContract {
 
         String getProductImageFullPath(String imagePath);
 
-        /*
-        //TODO - Apply search
-        void setFiltering(TasksFilterType requestType);
-        TasksFilterType getFiltering();
-        */
+        void checkGItem(GItem gItem, boolean value);
+
+        void onPurchaseClicked();
     }
 }

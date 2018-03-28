@@ -63,7 +63,7 @@ public class Product extends BaseModel<Product> implements Serializable {
             }
         }
         catch(Exception ex){
-            Log.e(LOG_TAG, ex.toString());
+            GeneralUtils.printErrorToLog(LOG_TAG, ex);
         }
     }
 
@@ -94,7 +94,8 @@ public class Product extends BaseModel<Product> implements Serializable {
                 json.put("image_path", image_path);
             }
         } catch(Exception ex){
-            Log.e(LOG_TAG, "Error converting product to JSONObject: " + ex.getMessage());
+            Log.e(LOG_TAG, "Error converting product to JSONObject: ");
+            GeneralUtils.printErrorToLog(LOG_TAG, ex);
         }
 
         return json;

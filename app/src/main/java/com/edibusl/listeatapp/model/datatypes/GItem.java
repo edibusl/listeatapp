@@ -28,7 +28,7 @@ public class GItem extends BaseModel<GItem> implements Serializable {
     private Integer weight;
     private Date created_time;
     private String comments;
-    private boolean is_checked;
+    private Boolean is_checked;
     private Product product;
 
     public GItem(){}
@@ -42,15 +42,25 @@ public class GItem extends BaseModel<GItem> implements Serializable {
             if(fromJson.has("gitem_id")){
                 this.setGitemId(fromJson.getLong("gitem_id"));
             }
+
             if(fromJson.has("quantity")){
                 this.setQuantity(fromJson.getInt("quantity"));
             }
+
             if(fromJson.has("weight")){
                 this.setWeight(fromJson.getInt("weight"));
             }
+
             if(fromJson.has("comments")){
                 this.setComments(fromJson.getString("comments"));
             }
+
+            if(fromJson.has("is_checked")){
+                this.setIsChecked(fromJson.getBoolean("is_checked"));
+            } else {
+                this.setIsChecked(false);
+            }
+
             if(fromJson.has("created_time")){
                 this.setCreatedTime(GeneralUtils.parseDateFromJsonString(fromJson.getString("created_time")));
             }
@@ -63,7 +73,7 @@ public class GItem extends BaseModel<GItem> implements Serializable {
             //Then in the fragment show the product name, not the comments
         }
         catch(Exception ex){
-            Log.e(LOG_TAG, ex.toString());
+            GeneralUtils.printErrorToLog(LOG_TAG, ex);
         }
     }
 
@@ -112,11 +122,12 @@ public class GItem extends BaseModel<GItem> implements Serializable {
                 json.put("comments", comments);
             }
 
-//            if (is_checked != null) {
-//                json.put("is_checked", is_checked);
-//            }
+            if (is_checked != null) {
+                json.put("is_checked", is_checked);
+            }
         } catch(Exception ex){
-            Log.e(LOG_TAG, "Error converting gItem to JSONObject: " + ex.getMessage());
+            Log.e(LOG_TAG, "Error converting gItem to JSONObject: ");
+            GeneralUtils.printErrorToLog(LOG_TAG, ex);
         }
 
         return json;

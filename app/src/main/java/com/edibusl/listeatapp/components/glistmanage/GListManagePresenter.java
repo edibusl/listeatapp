@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.edibusl.listeatapp.components.glistmanage.GListManageContract;
 import com.edibusl.listeatapp.components.glistmanage.GListManageFragment;
+import com.edibusl.listeatapp.helpers.GeneralUtils;
 import com.edibusl.listeatapp.model.datatypes.GItem;
 import com.edibusl.listeatapp.model.datatypes.GList;
 import com.edibusl.listeatapp.model.datatypes.GList;
@@ -49,7 +50,7 @@ public class GListManagePresenter implements GListManageContract.Presenter {
 
             @Override
             public void onError(String error) {
-                Log.e(LOG_TAG, error);
+                GeneralUtils.printErrorToLog(LOG_TAG, error);
                 mGListManageView.setLoadingIndicator(false);
             }
         });
@@ -72,7 +73,7 @@ public class GListManagePresenter implements GListManageContract.Presenter {
 
             @Override
             public void onError(String error) {
-                Log.e(LOG_TAG, error);
+                GeneralUtils.printErrorToLog(LOG_TAG, error);
             }
         });
     }

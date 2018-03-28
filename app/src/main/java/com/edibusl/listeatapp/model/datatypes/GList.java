@@ -2,6 +2,7 @@ package com.edibusl.listeatapp.model.datatypes;
 
 import android.util.Log;
 
+import com.edibusl.listeatapp.helpers.GeneralUtils;
 import com.edibusl.listeatapp.mvp.BaseModel;
 
 import org.json.JSONArray;
@@ -43,7 +44,8 @@ public class GList extends BaseModel<GList> implements Serializable {
                 json.put("description", description);
             }
         } catch(Exception ex){
-            Log.e(LOG_TAG, "Error converting GList to JSONObject: " + ex.getMessage());
+            Log.e(LOG_TAG, "Error converting GList to JSONObject: ");
+            GeneralUtils.printErrorToLog(LOG_TAG, ex);
         }
 
         return json;
@@ -79,7 +81,7 @@ public class GList extends BaseModel<GList> implements Serializable {
             }
         }
         catch(Exception ex){
-            Log.e(LOG_TAG, ex.toString());
+            GeneralUtils.printErrorToLog(LOG_TAG, ex);
         }
     }
 
@@ -92,7 +94,7 @@ public class GList extends BaseModel<GList> implements Serializable {
             }
         }
         catch(Exception ex){
-            Log.e(LOG_TAG, ex.toString());
+            GeneralUtils.printErrorToLog(LOG_TAG, ex);
         }
     }
 
@@ -105,7 +107,7 @@ public class GList extends BaseModel<GList> implements Serializable {
         }
         catch (Exception ex)
         {
-            Log.e(LOG_TAG, ex.toString());
+            GeneralUtils.printErrorToLog(LOG_TAG, ex);
         }
     }
 

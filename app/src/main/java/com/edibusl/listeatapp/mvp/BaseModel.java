@@ -3,6 +3,7 @@ package com.edibusl.listeatapp.mvp;
 
 import android.util.Log;
 
+import com.edibusl.listeatapp.helpers.GeneralUtils;
 import com.edibusl.listeatapp.model.datatypes.GList;
 
 import org.json.JSONArray;
@@ -42,7 +43,7 @@ public abstract class BaseModel<T> {
             }
         }
         catch(Exception ex){
-            Log.e(LOG_TAG, ex.toString());
+            GeneralUtils.printErrorToLog(LOG_TAG, ex);
         }
 
         return lstInstances;

@@ -10,6 +10,12 @@
     <!--GList Fragment-->
     <string name="glist_item_quantity_label">יח</string>
     <string name="glist_item_weight_label">גרם</string>
+    <string name="glist_total_items">סך הכל מוצרים:</string>
+    <string name="glist_purchase">בצע קנייה</string>
+    <string name="glist_purchase_made_message">המוצרים נשמרו כקנייה</string>
+    <string name="glist_purchase_sure">האם לבצע את הקנייה?</string>
+    <string name="glist_purchase_sure_yes">כן</string>
+    <string name="glist_purchase_sure_no">לא</string>
 
     <!--Add/Edit GItem Fragment-->
     <string name="gitem_product_label">מוצר:</string>

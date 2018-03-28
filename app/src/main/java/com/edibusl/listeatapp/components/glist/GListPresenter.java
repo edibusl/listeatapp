@@ -5,6 +5,7 @@ import android.support.v7.app.ActionBar;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.edibusl.listeatapp.helpers.GeneralUtils;
 import com.edibusl.listeatapp.model.datatypes.GItem;
 import com.edibusl.listeatapp.model.datatypes.GList;
 import com.edibusl.listeatapp.model.repository.AppData;
@@ -59,7 +60,7 @@ public class GListPresenter implements GListContract.Presenter {
 
             @Override
             public void onError(String error) {
-                Log.e(LOG_TAG, error);
+                GeneralUtils.printErrorToLog(LOG_TAG, error);
                 mGListView.setLoadingIndicator(false);
             }
         });
@@ -71,7 +72,47 @@ public class GListPresenter implements GListContract.Presenter {
     }
 
     @Override
+    public void checkGItem(GItem gItem, final boolean value) {
+        gItem.setIsChecked(value);
+        setGItemFKFields(gItem);
+        mAppData.GListRepo().updateGItem(gItem, new AppData.LoadDataCallback() {
+            @Override
+            public void onSuccess(Object data) {
+                Log.i(LOG_TAG, "checkGItem - success");
+            }
+
+            @Override
+            public void onError(String error) {
+                GeneralUtils.printErrorToLog(LOG_TAG, error);
+            }
+        });
+    }
+
+    @Override
     public String getProductImageFullPath(String imagePath) {
         return mAppData.ProductRepo().getProductThumbnailUrl(imagePath);
+    }
+
+    @Override
+    public void onPurchaseClicked() {
+        mAppData.GListRepo().purchase(mAppData.GListRepo().getCurrentGListId(), new AppData.LoadDataCallback() {
+            @Override
+            public void onSuccess(Object data) {
+                mGListView.showPurchaseMade();
+                loadData();
+            }
+
+            @Override
+            public void onError(String error) {
+                GeneralUtils.printErrorToLog(LOG_TAG, error);
+            }
+        });
+    }
+
+
+    private void setGItemFKFields(GItem gItem) {
+        gItem.setGlistId(mAppData.GListRepo().getCurrentGListId());
+        gItem.setUserId(mAppData.UserRepo().getCurrentUserId());
+        gItem.setProductId(gItem.getProduct().getProduct_id());
     }
 }

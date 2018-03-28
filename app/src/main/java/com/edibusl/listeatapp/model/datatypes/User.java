@@ -2,6 +2,7 @@ package com.edibusl.listeatapp.model.datatypes;
 
 import android.util.Log;
 
+import com.edibusl.listeatapp.helpers.GeneralUtils;
 import com.edibusl.listeatapp.mvp.BaseModel;
 
 import org.json.JSONObject;
@@ -42,7 +43,7 @@ public class User extends BaseModel<User> implements Serializable {
             }
         }
         catch(Exception ex){
-            Log.e(LOG_TAG, ex.toString());
+            GeneralUtils.printErrorToLog(LOG_TAG, ex);
         }
     }
 
@@ -57,7 +58,8 @@ public class User extends BaseModel<User> implements Serializable {
                 json.put("username", username);
             }
         } catch(Exception ex){
-            Log.e(LOG_TAG, "Error converting user to JSONObject: " + ex.getMessage());
+            Log.e(LOG_TAG, "Error converting user to JSONObject: ");
+            GeneralUtils.printErrorToLog(LOG_TAG, ex);
         }
 
         return json;

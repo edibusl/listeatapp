@@ -1,5 +1,6 @@
 package com.edibusl.listeatapp.components.glist;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -8,13 +9,16 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Pair;
 import android.view.MenuItem;
 
 import com.amazonaws.mobile.client.AWSMobileClient;
 import com.edibusl.listeatapp.R;
 import com.edibusl.listeatapp.components.glistmanage.GListManageActivity;
+import com.edibusl.listeatapp.components.settings.SettingsActivity;
 import com.edibusl.listeatapp.helpers.ActivityUtils;
 import com.edibusl.listeatapp.model.repository.AppData;
+import com.edibusl.listeatapp.mvp.BasePresenter;
 
 public class GListActivity extends AppCompatActivity {
     private GListPresenter mGListPresenter;
@@ -24,39 +28,17 @@ public class GListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //TODO - Move this to the initializer activity
-        //Init AWS singleton
-        AWSMobileClient.getInstance().initialize(this).execute();
-
-
         //Set the main content view of this activity
         setContentView(R.layout.glist_activity);
 
-        //Create the View - Set the inner fragment and attach it to this activity
-        GListFragment innerGListFragment = (GListFragment)getSupportFragmentManager().findFragmentById(R.id.contentFrame);
-        if (innerGListFragment == null) {
-            // Create the fragment
-            innerGListFragment = new GListFragment();
-            ActivityUtils.addFragmentToActivity(getSupportFragmentManager(), innerGListFragment, R.id.contentFrame);
-        }
-
-        //Set up the toolbar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        ActionBar ab = getSupportActionBar();
-        ab.setHomeAsUpIndicator(R.drawable.ic_menu);
-        ab.setDisplayHomeAsUpEnabled(true);
+        //Create fragment and add it to activity
+        GListFragment fragment = new GListFragment();
+        Pair<ActionBar, DrawerLayout> pair = ActivityUtils.createInnerFragment(this, fragment);
+        ActionBar ab = pair.first;
+        mDrawerLayout = pair.second;
 
         //Create the Presenter
-        mGListPresenter = new GListPresenter(AppData.getInstance(), innerGListFragment, ab);
-
-        //Set up the navigation drawer
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerLayout.setStatusBarBackground(R.color.colorPrimaryDark);
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        if (navigationView != null) {
-            setupDrawerContent(navigationView);
-        }
+        mGListPresenter = new GListPresenter(AppData.getInstance(), fragment, ab);
     }
 
     @Override
@@ -68,30 +50,5 @@ public class GListActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    //TODO - Move this function to a common utils func
-    private void setupDrawerContent(NavigationView navigationView) {
-        navigationView.setNavigationItemSelectedListener(
-                new NavigationView.OnNavigationItemSelectedListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(MenuItem menuItem) {
-                        switch (menuItem.getItemId()) {
-                            case R.id.glist_navigation_menu_item:
-                                Intent intent = new Intent(GListActivity.this, GListManageActivity.class);
-                                startActivity(intent);
-                                break;
-                            case R.id.statistics_navigation_menu_item:
-                                //TODO
-                                break;
-                            default:
-                                break;
-                        }
-                        // Close the navigation drawer when an item is selected.
-                        menuItem.setChecked(true);
-                        mDrawerLayout.closeDrawers();
-                        return true;
-                    }
-                });
     }
 }

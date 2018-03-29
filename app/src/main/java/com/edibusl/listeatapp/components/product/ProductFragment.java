@@ -161,8 +161,6 @@ public class ProductFragment extends Fragment implements ProductContract.View {
 
         //Set image filename for later use when saving product
         mThumbnailImageFileName = filename;
-
-        //TODO - Switch the "upload image" button to "remove image"
     }
 
     @Override

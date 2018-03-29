@@ -7,6 +7,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.edibusl.listeatapp.helpers.ConfigsManager;
 import com.edibusl.listeatapp.helpers.VolleyQueue;
 import com.edibusl.listeatapp.model.repository.AppData;
 
@@ -15,11 +16,13 @@ import org.json.JSONObject;
 import java.util.Map;
 
 public abstract class BaseRepository {
-    protected String mBaseUrl;
+    protected String getBaseUrl() {
+        return ConfigsManager.getInstance().getString(ConfigsManager.KEY_SERVER_URL);
+    }
 
     public void deleteEntity(String entityRestPath, Long id, Long parentId, @NonNull final AppData.LoadDataCallback callback) {
         //Instantiate the RequestQueue.
-        String url = String.format("%s/%s/%s", mBaseUrl, entityRestPath, id);
+        String url = String.format("%s/%s/%s", getBaseUrl(), entityRestPath, id);
 
         //Add parent id for Many-To-Many relations
         if(parentId != null) {
@@ -53,7 +56,7 @@ public abstract class BaseRepository {
     }
 
     public void updateEntity(String entityRestPath, final BaseModel entity, Long id, Long parentId, @NonNull final AppData.LoadDataCallback callback) {
-        String url = String.format("%s/%s", mBaseUrl, entityRestPath);
+        String url = String.format("%s/%s", getBaseUrl(), entityRestPath);
 
         //Decide about the request method according to edit mode / new mode
         int method = (id == null || id == 0 ? Request.Method.POST : Request.Method.PUT);

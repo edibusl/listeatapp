@@ -8,9 +8,12 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Pair;
 import android.view.MenuItem;
 
 import com.edibusl.listeatapp.R;
+import com.edibusl.listeatapp.components.glist.GListFragment;
+import com.edibusl.listeatapp.components.glist.GListPresenter;
 import com.edibusl.listeatapp.helpers.ActivityUtils;
 import com.edibusl.listeatapp.model.datatypes.GItem;
 import com.edibusl.listeatapp.model.datatypes.Product;
@@ -27,13 +30,11 @@ public class GItemActivity extends AppCompatActivity {
         //Set the main content view of this activity
         setContentView(R.layout.gitem_activity);
 
-        //Create the View - Set the inner fragment and attach it to this activity
-        GItemFragment innerGItemFragment = (GItemFragment)getSupportFragmentManager().findFragmentById(R.id.contentFrame);
-        if (innerGItemFragment == null) {
-            // Create the fragment
-            innerGItemFragment = new GItemFragment();
-            ActivityUtils.addFragmentToActivity(getSupportFragmentManager(), innerGItemFragment, R.id.contentFrame);
-        }
+        //Create fragment and add it to activity
+        GItemFragment fragment = new GItemFragment();
+        Pair<ActionBar, DrawerLayout> pair = ActivityUtils.createInnerFragment(this, fragment);
+        ActionBar ab = pair.first;
+        mDrawerLayout = pair.second;
 
         //Handle Edit Mode
         //Get the Intent that started this activity and extract the GItem
@@ -43,26 +44,13 @@ public class GItemActivity extends AppCompatActivity {
         }
 
         //Create the Presenter
-        this.mGItemPresenter = new GItemPresenter(AppData.getInstance(), innerGItemFragment, gItem);
+        mGItemPresenter = new GItemPresenter(AppData.getInstance(), fragment, gItem);
 
-        //Set up the toolbar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        ActionBar ab = getSupportActionBar();
-        ab.setHomeAsUpIndicator(R.drawable.ic_menu);
-        ab.setDisplayHomeAsUpEnabled(true);
+        //Set toolbar title according to edit mode
         if (gItem == null) {
             ab.setTitle(R.string.gitem_header_title_add);
         } else {
             ab.setTitle(R.string.gitem_header_title_edit);
-        }
-
-        //Set up the navigation drawer
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerLayout.setStatusBarBackground(R.color.colorPrimaryDark);
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        if (navigationView != null) {
-            setupDrawerContent(navigationView);
         }
     }
 
@@ -84,31 +72,5 @@ public class GItemActivity extends AppCompatActivity {
             Product product = (Product) data.getSerializableExtra("Product");
             mGItemPresenter.setProduct(product);
         }
-    }
-
-    //TODO - Move this function to a common utils func
-    private void setupDrawerContent(NavigationView navigationView) {
-        navigationView.setNavigationItemSelectedListener(
-                new NavigationView.OnNavigationItemSelectedListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(MenuItem menuItem) {
-                        switch (menuItem.getItemId()) {
-                            case R.id.glist_navigation_menu_item:
-                                // Do nothing, we're already on that screen
-                                break;
-                            case R.id.statistics_navigation_menu_item:
-                                //TODO
-//                                Intent intent = new Intent(TasksActivity.this, StatisticsActivity.class);
-//                                startActivity(intent);
-                                break;
-                            default:
-                                break;
-                        }
-                        // Close the navigation drawer when an item is selected.
-                        menuItem.setChecked(true);
-                        mDrawerLayout.closeDrawers();
-                        return true;
-                    }
-                });
     }
 }

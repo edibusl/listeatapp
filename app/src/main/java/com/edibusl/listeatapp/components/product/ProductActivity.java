@@ -8,9 +8,11 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Pair;
 import android.view.MenuItem;
 
 import com.edibusl.listeatapp.R;
+import com.edibusl.listeatapp.components.glist.GListFragment;
 import com.edibusl.listeatapp.helpers.ActivityUtils;
 import com.edibusl.listeatapp.model.repository.AppData;
 
@@ -25,32 +27,17 @@ public class ProductActivity extends AppCompatActivity {
         //Set the main content view of this activity
         setContentView(R.layout.product_activity);
 
-        //Create the View - Set the inner fragment and attach it to this activity
-        ProductFragment innerProductFragment = (ProductFragment)getSupportFragmentManager().findFragmentById(R.id.contentFrame);
-        if (innerProductFragment == null) {
-            // Create the fragment
-            innerProductFragment = new ProductFragment();
-            ActivityUtils.addFragmentToActivity(getSupportFragmentManager(), innerProductFragment, R.id.contentFrame);
-        }
+        //Create fragment and add it to activity
+        ProductFragment fragment = new ProductFragment();
+        Pair<ActionBar, DrawerLayout> pair = ActivityUtils.createInnerFragment(this, fragment);
+        ActionBar ab = pair.first;
+        mDrawerLayout = pair.second;
 
         //Create the Presenter
-        this.mProductPresenter = new ProductPresenter(AppData.getInstance(), innerProductFragment);
+        this.mProductPresenter = new ProductPresenter(AppData.getInstance(), fragment);
 
         //Set up the toolbar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        ActionBar ab = getSupportActionBar();
-        ab.setHomeAsUpIndicator(R.drawable.ic_menu);
-        ab.setDisplayHomeAsUpEnabled(true);
         ab.setTitle(R.string.product_header_title_add);
-
-        //Set up the navigation drawer
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerLayout.setStatusBarBackground(R.color.colorPrimaryDark);
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        if (navigationView != null) {
-            setupDrawerContent(navigationView);
-        }
     }
 
     @Override
@@ -68,31 +55,5 @@ public class ProductActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
         super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
         mProductPresenter.onImageChosen(requestCode, resultCode, imageReturnedIntent);
-    }
-
-    //TODO - Move this function to a common utils func
-    private void setupDrawerContent(NavigationView navigationView) {
-        navigationView.setNavigationItemSelectedListener(
-                new NavigationView.OnNavigationItemSelectedListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(MenuItem menuItem) {
-                        switch (menuItem.getItemId()) {
-                            case R.id.glist_navigation_menu_item:
-                                // Do nothing, we're already on that screen
-                                break;
-                            case R.id.statistics_navigation_menu_item:
-                                //TODO
-//                                Intent intent = new Intent(TasksActivity.this, StatisticsActivity.class);
-//                                startActivity(intent);
-                                break;
-                            default:
-                                break;
-                        }
-                        // Close the navigation drawer when an item is selected.
-                        menuItem.setChecked(true);
-                        mDrawerLayout.closeDrawers();
-                        return true;
-                    }
-                });
     }
 }

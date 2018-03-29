@@ -16,11 +16,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".components.glist.GListActivity">
+        <activity android:name=".components.start.StartActivity"
+            android:parentActivityName=".components.glist.GListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".components.glist.GListActivity">
         </activity>
         <activity android:name=".components.gitem.GItemActivity"
             android:parentActivityName=".components.glist.GListActivity">
@@ -33,6 +36,24 @@
         </activity>
         <activity android:name=".components.glistedit.GListEditActivity"
             android:parentActivityName=".components.glistmanage.GListManageActivity">
+        </activity>
+        <activity android:name=".components.settings.SettingsActivity"
+            android:parentActivityName=".components.glist.GListActivity">
+        </activity>
+
+        <activity
+            android:name="com.auth0.android.provider.RedirectActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="@string/com_auth0_domain"
+                    android:pathPrefix="/android/com.edibusl.listeatapp/callback"
+                    android:scheme="https" />
+            </intent-filter>
         </activity>
 
         <service android:name="com.amazonaws.mobileconnectors.s3.transferutility.TransferService" android:enabled="true" />

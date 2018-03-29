@@ -81,7 +81,6 @@ public class GListManageFragment extends Fragment implements GListManageContract
             }
         });
 
-        //TODO - What's that?
         setHasOptionsMenu(true);
 
         return root;

@@ -11,11 +11,13 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.RequestFuture;
 import com.edibusl.listeatapp.helpers.AwsUtils;
+import com.edibusl.listeatapp.helpers.ConfigsManager;
 import com.edibusl.listeatapp.helpers.VolleyQueue;
 import com.edibusl.listeatapp.model.datatypes.Category;
 import com.edibusl.listeatapp.model.datatypes.GItem;
 import com.edibusl.listeatapp.model.datatypes.GList;
 import com.edibusl.listeatapp.model.datatypes.Product;
+import com.edibusl.listeatapp.mvp.BaseRepository;
 
 import org.json.JSONObject;
 
@@ -23,11 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-public class ProductRepo {
-    //TODO - Move to configs
-    private final String BASE_URL = "http://10.100.102.7:9090";
-    private static final String PRODUCT_THUMBNAIL_BASE_URL = "https://s3.eu-central-1.amazonaws.com/listeatapp-userfiles-mobilehub-1030236591/public";
-
+public class ProductRepo extends BaseRepository {
     /**
      * A blocking call to get auto complete results of a products list
      * @param text Text search pattern
@@ -36,7 +34,7 @@ public class ProductRepo {
      */
     public List<Product> getProductsByAutoComplete(Long gListId, String text) throws Exception{
         //Instantiate the RequestQueue.
-        String url = String.format("%s/product/autocomplete/%s/%s", BASE_URL, gListId, text);
+        String url = String.format("%s/product/autocomplete/%s/%s", getBaseUrl(), gListId, text);
 
         RequestFuture<JSONObject> future = RequestFuture.newFuture();
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, future, future);
@@ -57,7 +55,7 @@ public class ProductRepo {
 
     public void getAllCategories(@NonNull final AppData.LoadDataCallback callback) {
         //Instantiate the RequestQueue.
-        String url = String.format("%s/category/all", BASE_URL);
+        String url = String.format("%s/category/all", getBaseUrl());
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
@@ -80,7 +78,7 @@ public class ProductRepo {
 
     public void createProduct(Product product, @NonNull final AppData.LoadDataCallback callback) {
         //Instantiate the RequestQueue.
-        String url = String.format("%s/product", BASE_URL);
+        String url = String.format("%s/product", getBaseUrl());
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, product.toJson(),
                 new Response.Listener<JSONObject>() {
@@ -107,6 +105,6 @@ public class ProductRepo {
     }
 
     public String getProductThumbnailUrl(String imageName) {
-        return String.format("%s/%s", PRODUCT_THUMBNAIL_BASE_URL, imageName);
+        return String.format("%s/%s", ConfigsManager.getInstance().getString(ConfigsManager.KEY_PRODUCT_THUMBNAIL_BASE_URL), imageName);
     }
 }

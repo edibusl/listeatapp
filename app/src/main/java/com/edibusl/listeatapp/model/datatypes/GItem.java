@@ -68,9 +68,6 @@ public class GItem extends BaseModel<GItem> implements Serializable {
             if(fromJson.has("product_obj")){
                 this.setProduct(new Product(fromJson.getJSONObject("product_obj")));
             }
-
-            //TODO - Continue parsing of the Product and Category
-            //Then in the fragment show the product name, not the comments
         }
         catch(Exception ex){
             GeneralUtils.printErrorToLog(LOG_TAG, ex);

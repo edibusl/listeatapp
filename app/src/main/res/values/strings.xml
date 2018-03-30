@@ -6,6 +6,7 @@
     <string name="nav_menu_item_glist">ניהול רשימות</string>
     <string name="nav_menu_item_statistics">סטטיסטיקה</string>
     <string name="nav_menu_item_settings">הגדרות</string>
+    <string name="nav_menu_item_logout">התנתקות</string>
 
     <!--GList Fragment-->
     <string name="glist_item_quantity_label">יח</string>
@@ -70,6 +71,12 @@
     <string name="settings_save_button_label">שמור</string>
     <string name="settings_title_add">הגדרות</string>
     <string name="settings_saved_text">ההגדרות נשמרו</string>
+
+    <!-- Login Fragment -->
+    <string name="login_btn_text">התחברות</string>
+    <string name="settings_btn_text">הגדרות</string>
+    <string name="login_title">List Eat</string>
+    <string name="login_failed_message">ההתחברות נכשלה. בדוק חיבור אינטרנט.</string>
 
     <!-- Auth0 settings -->
     <string name="com_auth0_client_id">jxVU5ebvBDQxVgWE1h4PAaR71iCKV9h2</string>

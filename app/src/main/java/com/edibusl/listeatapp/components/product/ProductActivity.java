@@ -34,7 +34,7 @@ public class ProductActivity extends AppCompatActivity {
         mDrawerLayout = pair.second;
 
         //Create the Presenter
-        this.mProductPresenter = new ProductPresenter(AppData.getInstance(), fragment);
+        this.mProductPresenter = new ProductPresenter(fragment);
 
         //Set up the toolbar
         ab.setTitle(R.string.product_header_title_add);

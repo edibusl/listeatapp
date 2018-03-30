@@ -23,9 +23,9 @@ public class ProductPresenter implements ProductContract.Presenter {
     private final AppData mAppData;
     private final ProductContract.View mProductView;
 
-    public ProductPresenter(@NonNull AppData appData, @NonNull ProductContract.View productView) {
-        mAppData = checkNotNull(appData, "appData cannot be null");
-        mProductView = checkNotNull(productView, "glistView cannot be null!");
+    public ProductPresenter(@NonNull ProductContract.View productView) {
+        mAppData = AppData.getInstance();
+        mProductView = checkNotNull(productView, "view cannot be null!");
         mProductView.setPresenter(this);
     }
 

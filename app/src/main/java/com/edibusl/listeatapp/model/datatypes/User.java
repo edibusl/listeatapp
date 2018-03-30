@@ -16,6 +16,8 @@ public class User extends BaseModel<User> implements Serializable {
 
     private Long user_id;
     private String username;
+    private String name;
+    private String profile_image;
 
     public static List<User> parseList(JSONObject jsonObject){
         return BaseModel.parseList(jsonObject, "user", new User());
@@ -57,6 +59,14 @@ public class User extends BaseModel<User> implements Serializable {
             if (username != null) {
                 json.put("username", username);
             }
+
+            if (username != null) {
+                json.put("name", name);
+            }
+
+            if (profile_image != null) {
+                json.put("profile_image", profile_image);
+            }
         } catch(Exception ex){
             Log.e(LOG_TAG, "Error converting user to JSONObject: ");
             GeneralUtils.printErrorToLog(LOG_TAG, ex);
@@ -78,6 +88,22 @@ public class User extends BaseModel<User> implements Serializable {
     }
     public User setUserName(String username) {
         this.username = username;
+        return this;
+    }
+
+    public String getName() {
+        return name;
+    }
+    public User setName(String name) {
+        this.name = name;
+        return this;
+    }
+
+    public String getProfileImage() {
+        return profile_image;
+    }
+    public User setProfileImage(String profile_image) {
+        this.profile_image = profile_image;
         return this;
     }
 }

@@ -44,7 +44,7 @@ public class GItemActivity extends AppCompatActivity {
         }
 
         //Create the Presenter
-        mGItemPresenter = new GItemPresenter(AppData.getInstance(), fragment, gItem);
+        mGItemPresenter = new GItemPresenter(fragment, gItem);
 
         //Set toolbar title according to edit mode
         if (gItem == null) {

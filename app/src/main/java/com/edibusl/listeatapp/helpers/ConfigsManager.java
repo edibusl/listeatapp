@@ -9,6 +9,7 @@ public class ConfigsManager {
     private static final String PREFERENCE_FILE_KEY = "preferences_file";
     public static final String KEY_SERVER_URL = "server_url";
     public static final String KEY_CURRENT_GLIST_ID = "current_glist_id";
+    public static final String KEY_CURRENT_USER_ID = "current_user_id";
     public static final String KEY_PRODUCT_THUMBNAIL_BASE_URL = "product_thumbnail_base_url";
 
     private SharedPreferences mSharedPref;

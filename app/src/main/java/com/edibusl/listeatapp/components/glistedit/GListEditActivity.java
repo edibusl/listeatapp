@@ -41,7 +41,7 @@ public class GListEditActivity extends AppCompatActivity {
         }
 
         //Create the Presenter
-        mGListEditPresenter = new GListEditPresenter(AppData.getInstance(), fragment, gList);
+        mGListEditPresenter = new GListEditPresenter(fragment, gList);
 
         //Set up the toolbar
         if (gList == null) {

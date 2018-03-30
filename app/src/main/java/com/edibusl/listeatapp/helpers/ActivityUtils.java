@@ -17,13 +17,10 @@ import android.util.Pair;
 import android.view.MenuItem;
 
 import com.edibusl.listeatapp.R;
-import com.edibusl.listeatapp.components.glist.GListActivity;
-import com.edibusl.listeatapp.components.glist.GListFragment;
-import com.edibusl.listeatapp.components.glist.GListPresenter;
 import com.edibusl.listeatapp.components.glistmanage.GListManageActivity;
 import com.edibusl.listeatapp.components.settings.SettingsActivity;
+import com.edibusl.listeatapp.components.start.StartActivity;
 import com.edibusl.listeatapp.model.repository.AppData;
-import com.edibusl.listeatapp.mvp.BasePresenter;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -74,14 +71,20 @@ public class ActivityUtils {
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
+                        Intent intent;
                         switch (menuItem.getItemId()) {
                             case R.id.glist_navigation_menu_item:
-                                Intent intent = new Intent(packageContext, GListManageActivity.class);
+                                intent = new Intent(packageContext, GListManageActivity.class);
                                 packageContext.startActivity(intent);
                                 break;
                             case R.id.settings_navigation_menu_item:
-                                Intent intent2 = new Intent(packageContext, SettingsActivity.class);
-                                packageContext.startActivity(intent2);
+                                intent = new Intent(packageContext, SettingsActivity.class);
+                                packageContext.startActivity(intent);
+                                break;
+                            case R.id.logout_navigation_menu_item:
+                                AppData.getInstance().UserRepo().logout();
+                                intent = new Intent(packageContext, StartActivity.class);
+                                packageContext.startActivity(intent);
                                 break;
                             default:
                                 break;

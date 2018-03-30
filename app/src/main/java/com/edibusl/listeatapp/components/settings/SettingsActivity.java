@@ -32,7 +32,7 @@ public class SettingsActivity extends AppCompatActivity {
         mDrawerLayout = pair.second;
 
         //Create the Presenter
-        mSettingsPresenter = new SettingsPresenter(AppData.getInstance(), fragment);
+        mSettingsPresenter = new SettingsPresenter(fragment);
 
         //Set up the toolbar
         ab.setTitle(R.string.settings_title_add);

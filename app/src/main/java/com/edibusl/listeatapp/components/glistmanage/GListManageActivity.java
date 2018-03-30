@@ -34,7 +34,7 @@ public class GListManageActivity extends AppCompatActivity {
         mDrawerLayout = pair.second;
 
         //Create the Presenter
-        this.mGListManagePresenter = new GListManagePresenter(AppData.getInstance(), fragment);
+        this.mGListManagePresenter = new GListManagePresenter(fragment);
 
         //Set up the toolbar
         ab.setTitle(getResources().getString(R.string.glist_manage_title));

@@ -38,7 +38,7 @@ public class GListActivity extends AppCompatActivity {
         mDrawerLayout = pair.second;
 
         //Create the Presenter
-        mGListPresenter = new GListPresenter(AppData.getInstance(), fragment, ab);
+        mGListPresenter = new GListPresenter(fragment, ab);
     }
 
     @Override

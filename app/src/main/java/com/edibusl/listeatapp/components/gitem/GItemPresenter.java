@@ -24,9 +24,9 @@ public class GItemPresenter implements GItemContract.Presenter {
 
     private GItem mGItem;
 
-    public GItemPresenter(@NonNull AppData appData, @NonNull GItemContract.View glistView, GItem gItem) {
-        mAppData = checkNotNull(appData, "appData cannot be null");
-        mGItemView = checkNotNull(glistView, "glistView cannot be null!");
+    public GItemPresenter(@NonNull GItemContract.View glistView, GItem gItem) {
+        mAppData = AppData.getInstance();
+        mGItemView = checkNotNull(glistView, "view cannot be null!");
         mGItemView.setPresenter(this);
         mGItem = gItem;
     }

@@ -25,9 +25,9 @@ public class GListManagePresenter implements GListManageContract.Presenter {
     private final AppData mAppData;
     private final GListManageContract.View mGListManageView;
 
-    public GListManagePresenter(@NonNull AppData appData, @NonNull GListManageContract.View glistManageView) {
-        mAppData = checkNotNull(appData, "appData cannot be null");
-        mGListManageView = checkNotNull(glistManageView, "glistView cannot be null!");
+    public GListManagePresenter(@NonNull GListManageContract.View glistManageView) {
+        mAppData = AppData.getInstance();
+        mGListManageView = checkNotNull(glistManageView, "view cannot be null!");
 
         mGListManageView.setPresenter(this);
     }

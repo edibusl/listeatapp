@@ -29,10 +29,10 @@ public class StartPresenter implements StartContract.Presenter {
     private final StartContract.View mStartView;
     private boolean mLoginShown = false;
 
-    public StartPresenter(@NonNull StartContract.View glistView, Activity activityContext) {
+    public StartPresenter(@NonNull StartContract.View view, Activity activityContext) {
         mAppData = AppData.getInstance();
         mActivityContext = activityContext;
-        mStartView = checkNotNull(glistView, "view cannot be null!");
+        mStartView = checkNotNull(view, "view cannot be null!");
         mStartView.setPresenter(this);
     }
 

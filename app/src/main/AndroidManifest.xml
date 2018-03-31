@@ -40,6 +40,9 @@
         <activity android:name=".components.settings.SettingsActivity"
             android:parentActivityName=".components.glist.GListActivity">
         </activity>
+        <activity android:name=".components.stats.StatsActivity"
+            android:parentActivityName=".components.glist.GListActivity">
+        </activity>
 
         <activity
             android:name="com.auth0.android.provider.RedirectActivity">

@@ -28,6 +28,12 @@ buildscript {
     }
 }
 
+allprojects {
+    repositories {
+        maven { url "https://jitpack.io" }
+    }
+}
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "com.android.support:appcompat-v7:$rootProject.supportLibraryVersion"
@@ -57,4 +63,6 @@ dependencies {
     compile ('com.auth0.android:auth0:1.10.1')
     compile 'com.auth0.android:jwtdecode:1.1.1'
 
+    //Charts
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
 }

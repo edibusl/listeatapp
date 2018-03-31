@@ -30,9 +30,9 @@ public class GListEditPresenter implements GListEditContract.Presenter {
 
     private GList mGList;
 
-    public GListEditPresenter(@NonNull GListEditContract.View glistView, GList gList) {
+    public GListEditPresenter(@NonNull GListEditContract.View view, GList gList) {
         mAppData = AppData.getInstance();
-        mGListEditView = checkNotNull(glistView, "view cannot be null!");
+        mGListEditView = checkNotNull(view, "view cannot be null!");
         mGListEditView.setPresenter(this);
         mGList = gList;
     }

@@ -24,9 +24,9 @@ public class GListPresenter implements GListContract.Presenter {
     private Long mCurGListId;
     private ActionBar mActionBar;
 
-    public GListPresenter(@NonNull GListContract.View glistView, ActionBar actionBar) {
+    public GListPresenter(@NonNull GListContract.View view, ActionBar actionBar) {
         mAppData = AppData.getInstance();
-        mGListView = checkNotNull(glistView, "view cannot be null!");
+        mGListView = checkNotNull(view, "view cannot be null!");
         mGListView.setPresenter(this);
 
         mActionBar = actionBar;

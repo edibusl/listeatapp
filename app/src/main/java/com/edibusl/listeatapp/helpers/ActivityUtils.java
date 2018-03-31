@@ -20,6 +20,7 @@ import com.edibusl.listeatapp.R;
 import com.edibusl.listeatapp.components.glistmanage.GListManageActivity;
 import com.edibusl.listeatapp.components.settings.SettingsActivity;
 import com.edibusl.listeatapp.components.start.StartActivity;
+import com.edibusl.listeatapp.components.stats.StatsActivity;
 import com.edibusl.listeatapp.model.repository.AppData;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -79,6 +80,10 @@ public class ActivityUtils {
                                 break;
                             case R.id.settings_navigation_menu_item:
                                 intent = new Intent(packageContext, SettingsActivity.class);
+                                packageContext.startActivity(intent);
+                                break;
+                            case R.id.statistics_navigation_menu_item:
+                                intent = new Intent(packageContext, StatsActivity.class);
                                 packageContext.startActivity(intent);
                                 break;
                             case R.id.logout_navigation_menu_item:

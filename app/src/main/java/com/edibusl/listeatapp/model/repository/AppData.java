@@ -21,14 +21,16 @@ public class AppData {
     private GListRepo mGListRepo = new GListRepo();
     private ProductRepo mProductRepo = new ProductRepo();
     private UserRepo mUserRepo = new UserRepo();
+    private StatsRepo mStatsRepo = new StatsRepo();
 
-    public GListRepo GListRepo(){
-        return mGListRepo;
-    }
+    public GListRepo GListRepo(){return mGListRepo;}
     public ProductRepo ProductRepo(){
         return mProductRepo;
     }
     public UserRepo UserRepo(){
         return mUserRepo;
+    }
+    public StatsRepo StatsRepo(){
+        return mStatsRepo;
     }
 }

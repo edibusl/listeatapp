@@ -17,9 +17,9 @@ public class SettingsPresenter implements SettingsContract.Presenter {
     private final AppData mAppData;
     private final SettingsContract.View mSettingsView;
 
-    public SettingsPresenter(@NonNull SettingsContract.View glistView) {
+    public SettingsPresenter(@NonNull SettingsContract.View view) {
         mAppData = AppData.getInstance();
-        mSettingsView = checkNotNull(glistView, "view cannot be null!");
+        mSettingsView = checkNotNull(view, "view cannot be null!");
         mSettingsView.setPresenter(this);
     }
 

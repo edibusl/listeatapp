@@ -72,6 +72,11 @@
     <string name="settings_title_add">הגדרות</string>
     <string name="settings_saved_text">ההגדרות נשמרו</string>
 
+    <!-- Stats Fragment-->
+    <string name="stats_title">סטטיסטיקה</string>
+    <string name="stats_group_by_text">התפלגות קניות לפי קטגוריות בחודש האחרון</string>
+    <string name="stats_no_data">לא קיימות קניות שמורות בחודש האחרון</string>
+
     <!-- Login Fragment -->
     <string name="login_btn_text">התחברות</string>
     <string name="settings_btn_text">הגדרות</string>

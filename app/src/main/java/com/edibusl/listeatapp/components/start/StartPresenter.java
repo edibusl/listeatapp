@@ -61,7 +61,7 @@ public class StartPresenter implements StartContract.Presenter {
         Auth0 auth0 = new Auth0(mActivityContext);
         auth0.setOIDCConformant(true);
         WebAuthProvider.init(auth0)
-                .withScheme("https")
+                .withScheme("custom")
                 .withScope("openid profile email")
                 .withAudience(String.format("https://%s/userinfo", mActivityContext.getString(R.string.com_auth0_domain)))
                 .start(mActivityContext, new AuthCallback() {

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">listeatapp</string>
+    <string name="app_name">ListEat</string>
 
     <!-- Navigation Menu -->
     <string name="navigation_view_header_title">ListEat App</string>

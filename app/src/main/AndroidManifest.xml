@@ -17,46 +17,39 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".components.start.StartActivity"
-            android:parentActivityName=".components.glist.GListActivity">
+            android:parentActivityName=".components.glist.GListActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".components.glist.GListActivity">
+        <activity android:name=".components.glist.GListActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize">
         </activity>
         <activity android:name=".components.gitem.GItemActivity"
-            android:parentActivityName=".components.glist.GListActivity">
+            android:parentActivityName=".components.glist.GListActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize">
         </activity>
         <activity android:name=".components.product.ProductActivity"
-            android:parentActivityName=".components.gitem.GItemActivity">
+            android:parentActivityName=".components.gitem.GItemActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize">
         </activity>
         <activity android:name=".components.glistmanage.GListManageActivity"
-            android:parentActivityName=".components.glist.GListActivity">
+            android:parentActivityName=".components.glist.GListActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize">
         </activity>
         <activity android:name=".components.glistedit.GListEditActivity"
-            android:parentActivityName=".components.glistmanage.GListManageActivity">
+            android:parentActivityName=".components.glistmanage.GListManageActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize">
         </activity>
         <activity android:name=".components.settings.SettingsActivity"
-            android:parentActivityName=".components.glist.GListActivity">
+            android:parentActivityName=".components.glist.GListActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize">
         </activity>
         <activity android:name=".components.stats.StatsActivity"
-            android:parentActivityName=".components.glist.GListActivity">
-        </activity>
-
-        <activity
-            android:name="com.auth0.android.provider.RedirectActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data
-                    android:host="@string/com_auth0_domain"
-                    android:pathPrefix="/android/com.edibusl.listeatapp/callback"
-                    android:scheme="https" />
-            </intent-filter>
+            android:parentActivityName=".components.glist.GListActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize">
         </activity>
 
         <service android:name="com.amazonaws.mobileconnectors.s3.transferutility.TransferService" android:enabled="true" />

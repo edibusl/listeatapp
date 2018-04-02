@@ -21,7 +21,7 @@ public class GList extends BaseModel<GList> implements Serializable {
     private List<User> users = new ArrayList<User>();
     private List<GItem> gitems = new ArrayList<GItem>();
 
-    public static List<GList> parseList(JSONObject jsonObject){
+    public static List<GList> parseList(JSONArray jsonObject){
         return BaseModel.parseList(jsonObject, "gList", new GList());
     }
 

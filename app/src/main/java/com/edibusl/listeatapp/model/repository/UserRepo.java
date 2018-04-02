@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.RequestFuture;
 import com.edibusl.listeatapp.helpers.ConfigsManager;
@@ -13,6 +14,7 @@ import com.edibusl.listeatapp.helpers.VolleyQueue;
 import com.edibusl.listeatapp.model.datatypes.User;
 import com.edibusl.listeatapp.mvp.BaseRepository;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.List;
@@ -43,14 +45,14 @@ public class UserRepo extends BaseRepository {
         //Instantiate the RequestQueue.
         String url = String.format("%s/user/autocomplete/%s", getBaseUrl(), text);
 
-        RequestFuture<JSONObject> future = RequestFuture.newFuture();
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, future, future);
+        RequestFuture<JSONArray> future = RequestFuture.newFuture();
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, future, future);
 
         // Add the request to the RequestQueue.
         VolleyQueue.getInstance().addToRequestQueue(request);
 
         try {
-            JSONObject response = future.get();
+            JSONArray response = future.get();
             List<User> lstUsers = User.parseList(response);
 
             return lstUsers;

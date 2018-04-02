@@ -24,7 +24,7 @@ public class Product extends BaseModel<Product> implements Serializable {
     private String image_path;
     private Category category;
 
-    public static List<Product> parseList(JSONObject jsonObject){
+    public static List<Product> parseList(JSONArray jsonObject){
         return BaseModel.parseList(jsonObject, "product", new Product());
     }
 

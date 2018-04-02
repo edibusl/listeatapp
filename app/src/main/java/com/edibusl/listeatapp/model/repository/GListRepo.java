@@ -7,6 +7,7 @@ import android.util.Log;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.edibusl.listeatapp.helpers.ConfigsManager;
 import com.edibusl.listeatapp.helpers.GeneralUtils;
@@ -15,6 +16,7 @@ import com.edibusl.listeatapp.model.datatypes.GItem;
 import com.edibusl.listeatapp.model.datatypes.GList;
 import com.edibusl.listeatapp.mvp.BaseRepository;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class GListRepo extends BaseRepository {
@@ -61,10 +63,10 @@ public class GListRepo extends BaseRepository {
         //Instantiate the RequestQueue.
         String url = String.format("%s/glist/all/%s", getBaseUrl(), String.valueOf(userId));
 
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
-                new Response.Listener<JSONObject>() {
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONArray>() {
                     @Override
-                    public void onResponse(JSONObject response) {
+                    public void onResponse(JSONArray response) {
                         callback.onSuccess(GList.parseList(response));
                     }
                 },

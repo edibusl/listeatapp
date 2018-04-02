@@ -65,8 +65,8 @@ public class GItem extends BaseModel<GItem> implements Serializable {
                 this.setCreatedTime(GeneralUtils.parseDateFromJsonString(fromJson.getString("created_time")));
             }
 
-            if(fromJson.has("product_obj")){
-                this.setProduct(new Product(fromJson.getJSONObject("product_obj")));
+            if(fromJson.has("product")){
+                this.setProduct(new Product(fromJson.getJSONObject("product")));
             }
         }
         catch(Exception ex){

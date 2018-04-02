@@ -7,13 +7,9 @@ import android.support.annotation.NonNull;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.RequestFuture;
-import com.edibusl.listeatapp.helpers.AwsUtils;
-import com.edibusl.listeatapp.helpers.ConfigsManager;
 import com.edibusl.listeatapp.helpers.VolleyQueue;
-import com.edibusl.listeatapp.model.datatypes.Category;
-import com.edibusl.listeatapp.model.datatypes.Product;
 import com.edibusl.listeatapp.mvp.BaseRepository;
 
 import org.json.JSONArray;
@@ -26,14 +22,14 @@ public class StatsRepo extends BaseRepository {
         //Instantiate the RequestQueue.
         String url = String.format("%s/stats/bycategory/%s", getBaseUrl(), userId);
 
-        RequestFuture<JSONObject> future = RequestFuture.newFuture();
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
-                new Response.Listener<JSONObject>() {
+        RequestFuture<JSONArray> future = RequestFuture.newFuture();
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONArray>() {
                     @Override
-                    public void onResponse(JSONObject response) {
+                    public void onResponse(JSONArray response) {
                         try {
-                            if (response != null && response.has("statsResult")) {
-                                callback.onSuccess(response.getJSONArray("statsResult"));
+                            if (response != null) {
+                                callback.onSuccess(response);
                             } else {
                                 callback.onSuccess(null);
                             }

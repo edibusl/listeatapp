@@ -8,6 +8,7 @@ import android.util.Log;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.RequestFuture;
 import com.edibusl.listeatapp.helpers.AwsUtils;
@@ -19,6 +20,7 @@ import com.edibusl.listeatapp.model.datatypes.GList;
 import com.edibusl.listeatapp.model.datatypes.Product;
 import com.edibusl.listeatapp.mvp.BaseRepository;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -36,14 +38,14 @@ public class ProductRepo extends BaseRepository {
         //Instantiate the RequestQueue.
         String url = String.format("%s/product/autocomplete/%s/%s", getBaseUrl(), gListId, text);
 
-        RequestFuture<JSONObject> future = RequestFuture.newFuture();
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, future, future);
+        RequestFuture<JSONArray> future = RequestFuture.newFuture();
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, future, future);
 
         // Add the request to the RequestQueue.
         VolleyQueue.getInstance().addToRequestQueue(request);
 
         try {
-            JSONObject response = future.get();
+            JSONArray response = future.get();
             List<Product> lstProducts = Product.parseList(response);
 
             //return new ArrayList<Product>();
@@ -57,10 +59,10 @@ public class ProductRepo extends BaseRepository {
         //Instantiate the RequestQueue.
         String url = String.format("%s/category/all", getBaseUrl());
 
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
-                new Response.Listener<JSONObject>() {
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONArray>() {
                     @Override
-                    public void onResponse(JSONObject response) {
+                    public void onResponse(JSONArray response) {
                         callback.onSuccess(Category.parseList(response));
                     }
                 },

@@ -18,27 +18,16 @@ public class Category implements Serializable {
     private String name;
     private String description;
 
-    public static List<Category> parseList(JSONObject jsonObject){
+    public static List<Category> parseList(JSONArray jsonObject){
         List<Category> lstCategories = new ArrayList<>();
         if(jsonObject == null){
             return lstCategories;
         }
 
         try {
-            if (!jsonObject.has("category")) {
-                return lstCategories;
-            }
-
-            //This category list may be returned as a JSONObject if there's a single result
-            //or as JSONArray if there are multiple results
-            Object category = jsonObject.get("category");
-            if(category instanceof JSONObject){
-                lstCategories.add(new Category((JSONObject)category));
-            }else{
-                JSONArray products = (JSONArray)category;
-                for(int i = 0; i < products.length(); i++){
-                    lstCategories.add(new Category(products.getJSONObject(i)));
-                }
+            JSONArray products = jsonObject;
+            for(int i = 0; i < products.length(); i++){
+                lstCategories.add(new Category(products.getJSONObject(i)));
             }
         }
         catch(Exception ex){

@@ -5,6 +5,7 @@ import android.util.Log;
 import com.edibusl.listeatapp.helpers.GeneralUtils;
 import com.edibusl.listeatapp.mvp.BaseModel;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.Serializable;
@@ -19,7 +20,7 @@ public class User extends BaseModel<User> implements Serializable {
     private String name;
     private String profile_image;
 
-    public static List<User> parseList(JSONObject jsonObject){
+    public static List<User> parseList(JSONArray jsonObject){
         return BaseModel.parseList(jsonObject, "user", new User());
     }
 

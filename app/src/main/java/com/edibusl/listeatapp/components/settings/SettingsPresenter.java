@@ -7,10 +7,6 @@ import com.edibusl.listeatapp.model.repository.AppData;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-/**
- * Listens to user actions from the UI ({@link SettingsFragment}), retrieves the data and updates the
- * UI as required.
- */
 public class SettingsPresenter implements SettingsContract.Presenter {
     public static final String LOG_TAG = "SettingsPresenter";
 

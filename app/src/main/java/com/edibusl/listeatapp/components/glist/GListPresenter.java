@@ -11,10 +11,6 @@ import com.edibusl.listeatapp.model.repository.AppData;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-/**
- * Listens to user actions from the UI ({@link GListFragment}), retrieves the data and updates the
- * UI as required.
- */
 public class GListPresenter implements GListContract.Presenter {
     public static final String LOG_TAG = "GListPresenter";
 

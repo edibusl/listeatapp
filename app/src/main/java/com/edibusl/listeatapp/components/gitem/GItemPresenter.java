@@ -12,10 +12,6 @@ import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-/**
- * Listens to user actions from the UI ({@link GItemFragment}), retrieves the data and updates the
- * UI as required.
- */
 public class GItemPresenter implements GItemContract.Presenter {
     public static final String LOG_TAG = "GItemPresenter";
 

@@ -5,10 +5,6 @@ import com.edibusl.listeatapp.model.repository.AppData;
 import org.json.JSONArray;
 import static com.google.common.base.Preconditions.checkNotNull;
 
-/**
- * Listens to user actions from the UI ({@link StatsFragment}), retrieves the data and updates the
- * UI as required.
- */
 public class StatsPresenter implements StatsContract.Presenter {
     public static final String LOG_TAG = "StatsPresenter";
 

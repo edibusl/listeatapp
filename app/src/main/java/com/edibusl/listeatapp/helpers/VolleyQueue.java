@@ -12,6 +12,11 @@ import com.android.volley.toolbox.Volley;
 
 import java.util.HashMap;
 
+/**
+ * A singleton class that holds a single queue for the whole application.
+ * This is a queue for all requests that are sent to the server from the app.
+ * Additionally, the class provides more functionality related to sending requests using Volley.
+ */
 public class VolleyQueue {
     private static VolleyQueue mInstance;
 

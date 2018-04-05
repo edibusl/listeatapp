@@ -3,7 +3,6 @@ package com.edibusl.listeatapp.model.repository;
 
 import android.app.Activity;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -23,9 +22,7 @@ import com.edibusl.listeatapp.mvp.BaseRepository;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 public class ProductRepo extends BaseRepository {
     /**

@@ -1,6 +1,5 @@
 package com.edibusl.listeatapp.components.glist;
 
-import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.support.annotation.NonNull;
 import android.util.Log;

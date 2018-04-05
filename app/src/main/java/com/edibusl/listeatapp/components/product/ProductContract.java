@@ -11,9 +11,6 @@ import com.edibusl.listeatapp.mvp.BaseView;
 
 import java.util.List;
 
-/**
- * This specifies the contract between the view and the presenter.
- */
 public interface ProductContract {
 
     interface View extends BaseView<Presenter> {

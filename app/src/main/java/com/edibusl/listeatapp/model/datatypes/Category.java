@@ -1,7 +1,5 @@
 package com.edibusl.listeatapp.model.datatypes;
 
-import android.util.Log;
-
 import com.edibusl.listeatapp.helpers.GeneralUtils;
 
 import org.json.JSONArray;

@@ -3,18 +3,13 @@ package com.edibusl.listeatapp.components.glistedit;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.edibusl.listeatapp.components.glistedit.GListEditContract;
-import com.edibusl.listeatapp.components.glistedit.GListEditFragment;
 import com.edibusl.listeatapp.helpers.GeneralUtils;
-import com.edibusl.listeatapp.model.datatypes.GList;
 import com.edibusl.listeatapp.model.datatypes.GList;
 import com.edibusl.listeatapp.model.datatypes.User;
 import com.edibusl.listeatapp.model.repository.AppData;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.microedition.khronos.opengles.GL;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 

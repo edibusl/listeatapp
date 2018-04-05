@@ -16,6 +16,7 @@ public class ConfigsManager {
     private static HashMap<String, Object> mDefaults;
     static
     {
+        //Set default values for some keys
         mDefaults = new HashMap<>();
         mDefaults.put(KEY_SERVER_URL, "http://10.100.102.7:9090");
         mDefaults.put(KEY_PRODUCT_THUMBNAIL_BASE_URL, "https://s3.eu-central-1.amazonaws.com/listeatapp-userfiles-mobilehub-1030236591/public");

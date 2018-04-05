@@ -21,7 +21,7 @@ public class User extends BaseModel<User> implements Serializable {
     private String profile_image;
 
     public static List<User> parseList(JSONArray jsonObject){
-        return BaseModel.parseList(jsonObject, "user", new User());
+        return BaseModel.parseList(jsonObject, new User());
     }
 
     @Override

@@ -5,14 +5,9 @@ import android.util.Log;
 import com.edibusl.listeatapp.helpers.GeneralUtils;
 import com.edibusl.listeatapp.mvp.BaseModel;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
-
 import java.io.Serializable;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
 
 public class GItem extends BaseModel<GItem> implements Serializable {
     public static final String LOG_TAG = "GItem";
@@ -26,7 +21,7 @@ public class GItem extends BaseModel<GItem> implements Serializable {
 
     private Integer quantity;
     private Integer weight;
-    private Date created_time;
+    private Date created_date;
     private String comments;
     private Boolean is_checked;
     private Product product;
@@ -61,8 +56,8 @@ public class GItem extends BaseModel<GItem> implements Serializable {
                 this.setIsChecked(false);
             }
 
-            if(fromJson.has("created_time")){
-                this.setCreatedTime(GeneralUtils.parseDateFromJsonString(fromJson.getString("created_time")));
+            if(fromJson.has("created_date")){
+                this.setCreatedDate(GeneralUtils.parseDateFromJsonString(fromJson.getString("created_date")));
             }
 
             if(fromJson.has("product")){
@@ -111,8 +106,8 @@ public class GItem extends BaseModel<GItem> implements Serializable {
                 json.put("weight", weight);
             }
 
-            if (created_time != null) {
-                json.put("created_time", created_time.toString());
+            if (created_date != null) {
+                json.put("created_date", GeneralUtils.dateToString(created_date));
             }
 
             if (comments != null) {
@@ -154,11 +149,11 @@ public class GItem extends BaseModel<GItem> implements Serializable {
         return this;
     }
 
-    public Date getCreatedTime() {
-        return created_time;
+    public Date getCreatedDate() {
+        return created_date;
     }
-    public GItem setCreatedTime(Date created_time) {
-        this.created_time = created_time;
+    public GItem setCreatedDate(Date created_date) {
+        this.created_date = created_date;
         return this;
     }
 

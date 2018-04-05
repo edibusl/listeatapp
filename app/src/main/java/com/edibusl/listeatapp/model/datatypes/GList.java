@@ -22,7 +22,7 @@ public class GList extends BaseModel<GList> implements Serializable {
     private List<GItem> gitems = new ArrayList<GItem>();
 
     public static List<GList> parseList(JSONArray jsonObject){
-        return BaseModel.parseList(jsonObject, "gList", new GList());
+        return BaseModel.parseList(jsonObject, new GList());
     }
 
     @Override

@@ -32,15 +32,12 @@ import com.edibusl.listeatapp.components.gitem.GItemActivity;
 import com.edibusl.listeatapp.components.glistmanage.GListManageActivity;
 import com.edibusl.listeatapp.model.datatypes.Category;
 import com.edibusl.listeatapp.model.datatypes.GItem;
-import com.edibusl.listeatapp.model.datatypes.GList;
 import com.google.common.base.Strings;
 import com.squareup.picasso.Picasso;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public class GListFragment extends Fragment implements GListContract.View {
-    private final int MENU_CONTEXT_DELETE_ID = 1;
-
     private GListContract.Presenter mPresenter;
     private GItemsAdapter mListAdapter;
 
@@ -191,7 +188,7 @@ public class GListFragment extends Fragment implements GListContract.View {
         }
 
         private void setList(List<GItem> gItems) {
-            mItems = new ArrayList<Object>();
+            mItems = new ArrayList<>();
 
             if(gItems == null){
                 return;
@@ -225,9 +222,7 @@ public class GListFragment extends Fragment implements GListContract.View {
         }
 
         @Override
-        public View getView(int i, View view, ViewGroup viewGroup) {
-            View rowView = view;
-
+        public View getView(int i, View rowView, ViewGroup viewGroup) {
             final Object rowObj = getItem(i);
             GItem gItem = null;
             Category category = null;

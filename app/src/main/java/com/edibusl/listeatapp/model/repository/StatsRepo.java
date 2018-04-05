@@ -1,7 +1,6 @@
 package com.edibusl.listeatapp.model.repository;
 
 
-import android.app.Activity;
 import android.support.annotation.NonNull;
 
 import com.android.volley.Request;
@@ -13,9 +12,6 @@ import com.edibusl.listeatapp.helpers.VolleyQueue;
 import com.edibusl.listeatapp.mvp.BaseRepository;
 
 import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.util.List;
 
 public class StatsRepo extends BaseRepository {
     public void getStatsByCategory(Long userId, @NonNull final AppData.LoadDataCallback callback) {

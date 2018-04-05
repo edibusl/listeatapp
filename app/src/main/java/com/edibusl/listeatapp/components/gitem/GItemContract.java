@@ -9,9 +9,6 @@ import com.edibusl.listeatapp.mvp.BaseView;
 
 import java.util.List;
 
-/**
- * This specifies the contract between the view and the presenter.
- */
 public interface GItemContract {
 
     interface View extends BaseView<Presenter> {

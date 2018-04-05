@@ -1,18 +1,15 @@
 package com.edibusl.listeatapp.components.stats;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.edibusl.listeatapp.R;
-import com.edibusl.listeatapp.components.stats.StatsContract;
 import com.edibusl.listeatapp.helpers.GeneralUtils;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.PieData;

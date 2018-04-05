@@ -5,9 +5,6 @@ import com.edibusl.listeatapp.mvp.BaseView;
 
 import org.json.JSONArray;
 
-/**
- * This specifies the contract between the view and the presenter.
- */
 public interface StatsContract {
 
     interface View extends BaseView<Presenter> {

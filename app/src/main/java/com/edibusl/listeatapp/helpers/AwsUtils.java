@@ -1,7 +1,6 @@
 package com.edibusl.listeatapp.helpers;
 
 import android.app.Activity;
-import android.content.Context;
 import android.util.Log;
 
 import com.amazonaws.mobile.client.AWSMobileClient;
@@ -14,7 +13,6 @@ import com.amazonaws.mobileconnectors.s3.transferutility.TransferListener;
 import com.amazonaws.services.s3.AmazonS3Client;
 
 import java.io.File;
-
 
 public class AwsUtils {
     private static final String LOG_TAG = "AwsUtils";
@@ -42,7 +40,7 @@ public class AwsUtils {
         }).execute();
     }
 
-    public void uploadWithTransferUtility(final String fileFullPath, final String filename) {
+    private void uploadWithTransferUtility(final String fileFullPath, final String filename) {
         TransferUtility transferUtility =
                 TransferUtility.builder()
                         .context(mCurContext)

@@ -7,8 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Pair;
 
 import com.edibusl.listeatapp.R;
-import com.edibusl.listeatapp.components.stats.StatsFragment;
-import com.edibusl.listeatapp.components.stats.StatsPresenter;
 import com.edibusl.listeatapp.helpers.ActivityUtils;
 
 public class StatsActivity extends AppCompatActivity {
@@ -24,7 +22,7 @@ public class StatsActivity extends AppCompatActivity {
 
         //Create fragment and add it to activity
         StatsFragment fragment = new StatsFragment();
-        Pair<ActionBar, DrawerLayout> pair = ActivityUtils.createInnerFragment(this, fragment);
+        Pair<ActionBar, DrawerLayout> pair = ActivityUtils.setupActivityAndFragment(this, fragment);
         ActionBar ab = pair.first;
         mDrawerLayout = pair.second;
 

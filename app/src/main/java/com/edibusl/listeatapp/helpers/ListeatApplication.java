@@ -2,8 +2,6 @@ package com.edibusl.listeatapp.helpers;
 
 import android.app.Application;
 
-import com.amazonaws.mobile.client.AWSMobileClient;
-
 public class ListeatApplication extends Application{
     @Override
     public void onCreate() {

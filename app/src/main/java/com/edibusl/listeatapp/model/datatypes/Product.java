@@ -9,7 +9,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 public class Product extends BaseModel<Product> implements Serializable {
@@ -25,7 +24,7 @@ public class Product extends BaseModel<Product> implements Serializable {
     private Category category;
 
     public static List<Product> parseList(JSONArray jsonObject){
-        return BaseModel.parseList(jsonObject, "product", new Product());
+        return BaseModel.parseList(jsonObject, new Product());
     }
 
     @Override

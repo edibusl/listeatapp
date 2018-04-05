@@ -1,12 +1,8 @@
 package com.edibusl.listeatapp.components.stats;
 
 import android.support.annotation.NonNull;
-
-import com.edibusl.listeatapp.helpers.ConfigsManager;
 import com.edibusl.listeatapp.model.repository.AppData;
-
 import org.json.JSONArray;
-
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**

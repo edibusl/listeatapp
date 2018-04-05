@@ -1,7 +1,6 @@
 package com.edibusl.listeatapp.components.glistedit;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -19,9 +18,6 @@ import android.widget.Filter;
 import android.widget.Filterable;
 
 import com.google.common.base.Strings;
-import com.shawnlin.numberpicker.NumberPicker;
-import android.widget.RadioButton;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.edibusl.listeatapp.R;
@@ -83,7 +79,7 @@ public class GListEditFragment extends Fragment implements GListEditContract.Vie
         GList gList = (mEditedGList != null ? mEditedGList : new GList());
 
         //Subject - validation and setting
-        EditText editSubject = (EditText)(getView().findViewById(R.id.editSubject));
+        EditText editSubject = getView().findViewById(R.id.editSubject);
         String sSubject = editSubject.getText().toString();
         if(Strings.isNullOrEmpty(sSubject)) {
             Toast.makeText(this.getContext(), R.string.glist_edit_no_subject, Toast.LENGTH_SHORT).show();
@@ -173,15 +169,6 @@ class AutoCompleteAdapter extends ArrayAdapter<String> implements Filterable {
         }
 
         return mlstUsers.get(index);
-    }
-
-    public void setSelectedUser(User user) {
-        mlstUsers.clear();
-        mlstUsers.add(user);
-        mlstItems.clear();
-        mlstItems.add(user.getUserName());
-
-        notifyDataSetChanged();
     }
 
     @Override
